@@ -583,6 +583,15 @@
       opacity: 0.7;
     }
 
+    .form-note a { color: var(--accent); text-decoration: none; }
+    .form-note a:hover { text-decoration: underline; }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     /* Footer */
     footer {
       position: relative;
@@ -655,6 +664,7 @@
         <li><a href="#types">会员类型</a></li>
         <li><a href="#rights">权利义务</a></li>
         <li><a href="#apply">申请入会</a></li>
+        <li><a href="members.html">会员池</a></li>
       </ul>
     </div>
   </nav>
@@ -801,8 +811,8 @@
           <label for="reason">入水宣言</label>
           <textarea id="reason" name="reason" placeholder="简述你为何想离开陆地，潜入水底..."></textarea>
         </div>
-        <button type="submit" class="submit-btn">提交申请 · 潜入</button>
-        <p class="form-note">* 本表单为演示用途，提交后将显示确认信息</p>
+        <button type="submit" class="submit-btn" id="submitBtn">提交申请 · 潜入</button>
+        <p class="form-note">* 提交后将写入会员池，可在 <a href="members.html" style="color:var(--accent)">会员池页面</a> 查看（联系方式不公开展示）</p>
       </form>
     </section>
 
@@ -814,6 +824,8 @@
     <p style="margin-top:0.75rem; opacity:0.6;">非正式业务主管单位：山寨 MFA</p>
   </footer>
 
+  <script src="config.js"></script>
+  <script src="db.js"></script>
   <script>
     // Bubbles
     const bubblesEl = document.getElementById('bubbles');
@@ -839,11 +851,32 @@
     reveals.forEach((el) => observer.observe(el));
 
     // Form submit
-    document.getElementById('applyForm').addEventListener('submit', (e) => {
+    document.getElementById('applyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      alert(`🌊 ${name}，你的入水申请已随波传递。\n\n山寨水会将在下一次涨潮时与您联系。`);
-      e.target.reset();
+      const btn = document.getElementById('submitBtn');
+      const name = document.getElementById('name').value.trim();
+      const member_type = document.getElementById('type').value;
+      const contact = document.getElementById('contact').value.trim();
+      const reason = document.getElementById('reason').value.trim();
+
+      if (!ShuihuiDB.isConfigured()) {
+        alert('Google 表格尚未接通。\n\n请按 google-apps-script.gs 中的说明部署脚本，并将 Web 应用 URL 填入 config.js。');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '潜入中…';
+
+      try {
+        await ShuihuiDB.submitApplication({ name, member_type, contact, reason });
+        alert(`🌊 ${name}，你的入水申请已写入会员池。\n\n可在「会员池」页面查看，山寨水会将在下一次涨潮时与您联系。`);
+        e.target.reset();
+      } catch (err) {
+        alert('提交失败：' + (err.message || '请稍后重试'));
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '提交申请 · 潜入';
+      }
     });
   </script>
 </body>
