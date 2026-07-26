@@ -449,6 +449,47 @@
       animation: tag-pop 0.4s ease-out;
     }
 
+    .recent-blessings {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .recent-blessing-item {
+      padding: 0.85rem 1rem;
+      background: rgba(201, 169, 98, 0.06);
+      border-left: 2px solid rgba(201, 169, 98, 0.35);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .recent-blessing-item time {
+      display: block;
+      font-size: 0.72rem;
+      color: rgba(139, 184, 200, 0.55);
+      margin-top: 0.35rem;
+    }
+
+    .recent-empty {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .wish-wall-empty {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    #wishSubmit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     @keyframes tag-pop {
       0% { transform: scale(0.5); opacity: 0; }
       70% { transform: scale(1.08); }
@@ -643,6 +684,15 @@
       </div>
     </section>
 
+    <!-- Recent blessings -->
+    <section class="panel reveal">
+      <p class="panel-label">Recent</p>
+      <h2>最近的祝词</h2>
+      <div class="recent-blessings" id="recentBlessings">
+        <p class="recent-empty">尚无记录，成为第一个抽取祝词的人</p>
+      </div>
+    </section>
+
     <!-- Wish wall -->
     <section class="panel reveal">
       <p class="panel-label">Wishes</p>
@@ -671,6 +721,8 @@
     </div>
   </div>
 
+  <script src="config.js"></script>
+  <script src="db.js"></script>
   <script>
     const blessings = [
       '愿你的每一岁都像涨潮一样，带来意料之外的淹没与滋润。',
@@ -692,25 +744,40 @@
       '～～～ 陆地干货，全部冲走 ～～～',
     ];
 
-    const defaultWishes = [
-      '生日快乐，蕴涵！',
-      '愿永远湿润',
-      '打捞更多荒诞',
-      '延迟一切无聊',
-    ];
-
     let joyCount = 0;
     const joyEl = document.getElementById('joyCount');
     const blessingBox = document.getElementById('blessingBox');
     const wishWall = document.getElementById('wishWall');
+    const recentBlessingsEl = document.getElementById('recentBlessings');
     const candles = document.querySelectorAll('.candle');
     let blownCount = 0;
 
-    function addJoy(n = 1) {
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function setJoyCount(n) {
+      joyCount = n;
+      joyEl.textContent = joyCount;
+    }
+
+    function bumpJoy(n = 1) {
       joyCount += n;
       joyEl.textContent = joyCount;
       joyEl.style.transform = 'scale(1.15)';
       setTimeout(() => { joyEl.style.transform = 'scale(1)'; }, 200);
+    }
+
+    async function recordInteraction(action, detail) {
+      bumpJoy(1);
+      if (!ShuihuiDB.isConfigured()) return;
+      try {
+        await ShuihuiDB.logBirthdayInteraction(action, detail);
+      } catch (err) {
+        console.warn('互动记录失败', err);
+      }
     }
 
     function spawnBubble(x, y, count = 1) {
@@ -765,6 +832,38 @@
         blessingBox.classList.remove('empty', 'fade');
         blessingBox.textContent = text;
       }, 200);
+      recordInteraction('bless', text);
+      prependRecentBlessing({ text, created_at: new Date().toISOString() });
+    }
+
+    function prependRecentBlessing(item) {
+      const empty = recentBlessingsEl.querySelector('.recent-empty');
+      if (empty) empty.remove();
+
+      const el = document.createElement('div');
+      el.className = 'recent-blessing-item';
+      el.innerHTML = `${escapeHtml(item.text)}<time>${formatDate(item.created_at)}</time>`;
+      recentBlessingsEl.prepend(el);
+
+      while (recentBlessingsEl.children.length > 8) {
+        recentBlessingsEl.lastElementChild.remove();
+      }
+    }
+
+    function renderRecentBlessings(list) {
+      if (!list.length) return;
+      recentBlessingsEl.innerHTML = list.map((item) => `
+        <div class="recent-blessing-item">
+          ${escapeHtml(item.text)}
+          <time>${formatDate(item.created_at)}</time>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
     }
 
     function blowCandle(candle) {
@@ -772,8 +871,9 @@
       candle.classList.add('out');
       blownCount++;
       spawnBubble(null, null, 3);
-      addJoy(1);
+      recordInteraction('candle');
       if (blownCount >= candles.length) {
+        recordInteraction('candles_complete', '五支蜡烛全部熄灭');
         setTimeout(() => {
           document.getElementById('victoryOverlay').classList.add('show');
           spawnConfetti();
@@ -800,32 +900,40 @@
 
     // Action buttons
     document.querySelectorAll('[data-action]').forEach((btn) => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         const action = btn.dataset.action;
-        addJoy(1);
         switch (action) {
           case 'bless':
             showBlessing();
             break;
           case 'bubbles':
+            await recordInteraction('bubbles');
             spawnBubble(null, null, 12);
             break;
           case 'confetti':
+            await recordInteraction('confetti');
             spawnConfetti();
             break;
           case 'splash':
+            await recordInteraction('splash');
             for (let i = 0; i < 8; i++) {
               setTimeout(() => spawnRipple(Math.random() * window.innerWidth, Math.random() * window.innerHeight), i * 80);
             }
             spawnBubble(null, null, 8);
             break;
-          case 'song':
-            alert('🎵 ' + songs[Math.floor(Math.random() * songs.length)]);
+          case 'song': {
+            const song = songs[Math.floor(Math.random() * songs.length)];
+            alert('🎵 ' + song);
+            await recordInteraction('song', song);
             break;
-          case 'gift':
-            alert('🎁 你向蕴涵呈上了：' + gifts[Math.floor(Math.random() * gifts.length)]);
+          }
+          case 'gift': {
+            const gift = gifts[Math.floor(Math.random() * gifts.length)];
+            alert('🎁 你向蕴涵呈上了：' + gift);
+            await recordInteraction('gift', gift);
             spawnBubble(null, null, 5);
             break;
+          }
         }
       });
     });
@@ -838,21 +946,46 @@
     });
 
     // Wish wall
-    function addWish(text) {
+    function addWishTag(text) {
+      const empty = wishWall.querySelector('.wish-wall-empty');
+      if (empty) empty.remove();
+
       const tag = document.createElement('span');
       tag.className = 'wish-tag';
       tag.textContent = text;
-      wishWall.appendChild(tag);
+      wishWall.prepend(tag);
       spawnBubble(null, null, 2);
-      addJoy(1);
     }
 
-    document.getElementById('wishSubmit').addEventListener('click', () => {
+    function renderWishes(wishes) {
+      if (!wishes.length) {
+        wishWall.innerHTML = '<span class="wish-wall-empty">祝福墙尚空，写下第一条水下低语吧</span>';
+        return;
+      }
+      wishWall.innerHTML = wishes.map((w) => `<span class="wish-tag">${escapeHtml(w.text)}</span>`).join('');
+    }
+
+    document.getElementById('wishSubmit').addEventListener('click', async () => {
       const input = document.getElementById('wishInput');
+      const btn = document.getElementById('wishSubmit');
       const val = input.value.trim();
-      if (val) {
-        addWish(val);
+      if (!val) return;
+
+      btn.disabled = true;
+
+      try {
+        if (ShuihuiDB.isConfigured()) {
+          await ShuihuiDB.submitBirthdayWish(val);
+          await recordInteraction('wish', val);
+        } else {
+          bumpJoy(1);
+        }
+        addWishTag(val);
         input.value = '';
+      } catch (err) {
+        alert('祝福发送失败：' + (err.message || '请稍后重试'));
+      } finally {
+        btn.disabled = false;
       }
     });
 
@@ -860,7 +993,20 @@
       if (e.key === 'Enter') document.getElementById('wishSubmit').click();
     });
 
-    defaultWishes.forEach((w) => addWish(w));
+    async function loadBirthdayData() {
+      if (!ShuihuiDB.isConfigured()) return;
+
+      try {
+        const data = await ShuihuiDB.getBirthdayData();
+        setJoyCount(data.totalJoy || 0);
+        renderWishes(data.wishes || []);
+        renderRecentBlessings(data.recentBlessings || []);
+      } catch (err) {
+        console.warn('加载生日数据失败', err);
+      }
+    }
+
+    loadBirthdayData();
 
     // Ambient bubbles
     setInterval(() => spawnBubble(null, null, 1), 2000);
