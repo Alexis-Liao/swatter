@@ -146,13 +146,36 @@ function getPublicApplications() {
     .reverse();
 }
 
+function ensureWishSheet_() {
+  const headers = ['created_at', 'author', 'text'];
+  const sheet = getOrCreateSheet_(SHEETS.birthdayWishes, headers);
+  const headerRow = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0];
+
+  if (headerRow[1] === 'text' && headerRow[2] === undefined) {
+    sheet.insertColumnAfter(1);
+    sheet.getRange(1, 2).setValue('author');
+  }
+
+  return sheet;
+}
+
+function parseWishRow_(row, index) {
+  if (row[1] === 'text' || (row[2] === undefined && row[1] !== undefined && String(row[1]).length > 0)) {
+    return { id: index + 1, created_at: row[0], author: null, text: row[1] };
+  }
+  return { id: index + 1, created_at: row[0], author: row[1] || null, text: row[2] };
+}
+
 function appendBirthdayWish(data) {
   const text = String(data.text || '').trim();
+  const author = String(data.author || '').trim();
   if (!text) throw new Error('祝福不能为空');
+  if (!author) throw new Error('请留下祝福人名称');
   if (text.length > 120) throw new Error('祝福过长');
+  if (author.length > 30) throw new Error('名称过长');
 
-  const sheet = getOrCreateSheet_(SHEETS.birthdayWishes, ['created_at', 'text']);
-  sheet.appendRow([new Date().toISOString(), text]);
+  const sheet = ensureWishSheet_();
+  sheet.appendRow([new Date().toISOString(), author, text]);
 }
 
 function appendBirthdayInteraction(data) {
@@ -166,7 +189,7 @@ function appendBirthdayInteraction(data) {
 }
 
 function getBirthdayData() {
-  const wishSheet = getOrCreateSheet_(SHEETS.birthdayWishes, ['created_at', 'text']);
+  const wishSheet = ensureWishSheet_();
   const logSheet = getOrCreateSheet_(SHEETS.birthdayLogs, ['created_at', 'action', 'detail']);
 
   const wishValues = wishSheet.getDataRange().getValues();
@@ -174,9 +197,7 @@ function getBirthdayData() {
 
   const wishes = wishValues.length <= 1
     ? []
-    : wishValues.slice(1).map(function (row, index) {
-        return { id: index + 1, created_at: row[0], text: row[1] };
-      }).reverse();
+    : wishValues.slice(1).map(parseWishRow_).reverse();
 
   const totalJoy = Math.max(0, logValues.length - 1);
 

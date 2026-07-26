@@ -78,7 +78,7 @@
 
   function buildSubmitParams(payload) {
     if (payload.type === 'birthday_wish') {
-      return { action: 'submit', type: 'birthday_wish', text: payload.text };
+      return { action: 'submit', type: 'birthday_wish', text: payload.text, author: payload.author };
     }
     if (payload.type === 'birthday_interaction') {
       return {
@@ -148,8 +148,12 @@
       return get('birthday');
     },
 
-    async submitBirthdayWish(text) {
-      await post({ type: 'birthday_wish', text: text.trim() });
+    async submitBirthdayWish(text, author) {
+      await post({
+        type: 'birthday_wish',
+        text: text.trim(),
+        author: (author || '').trim(),
+      });
     },
 
     async logBirthdayInteraction(action, detail) {

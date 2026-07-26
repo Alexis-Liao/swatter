@@ -397,6 +397,61 @@
 
     .blessing-box.fade { opacity: 0; }
 
+    .wish-hint {
+      font-size: 0.88rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      padding: 0.65rem 0.9rem;
+      background: rgba(201, 169, 98, 0.08);
+      border-left: 2px solid rgba(201, 169, 98, 0.4);
+      border-radius: 0 8px 8px 0;
+      line-height: 1.7;
+    }
+
+    .wish-form {
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .wish-form label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.05em;
+    }
+
+    .wish-form input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(126, 200, 212, 0.2);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-serif);
+      font-size: 0.92rem;
+    }
+
+    .wish-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .wish-form button {
+      align-self: end;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, var(--aqua), var(--water));
+      border: none;
+      border-radius: 8px;
+      color: var(--foam);
+      font-family: var(--font-display);
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.08em;
+    }
+
     /* Wish wall */
     .wish-input-row {
       display: flex;
@@ -440,13 +495,27 @@
     }
 
     .wish-tag {
-      padding: 0.4rem 0.85rem;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      padding: 0.5rem 0.9rem;
       background: rgba(94, 196, 212, 0.12);
       border: 1px solid rgba(94, 196, 212, 0.2);
-      border-radius: 2rem;
+      border-radius: 10px;
       font-size: 0.82rem;
       color: var(--text);
       animation: tag-pop 0.4s ease-out;
+      max-width: 100%;
+    }
+
+    .wish-author {
+      font-size: 0.72rem;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+    }
+
+    .wish-text {
+      line-height: 1.5;
     }
 
     .recent-blessings {
@@ -596,6 +665,14 @@
     @media (max-width: 600px) {
       .celebration-hero { padding: 2.5rem 0 1.5rem; }
       .cake { font-size: 4rem; }
+      .wish-form {
+        grid-template-columns: 1fr;
+      }
+
+      .wish-form button {
+        width: 100%;
+      }
+
       .wish-input-row { flex-direction: column; }
     }
   </style>
@@ -698,8 +775,16 @@
       <p class="panel-label">Wishes</p>
       <h2>祝福墙</h2>
       <p>写下你想对蕴涵说的水下低语，它将漂浮在祝福墙中，与其他气泡共存。</p>
-      <div class="wish-input-row">
-        <input type="text" id="wishInput" placeholder="例：愿你永远保有未脱水的那一部分..." maxlength="60" />
+      <p class="wish-hint">请留下你在水中的名字，让蕴涵知道这条祝福来自哪位水生生物。</p>
+      <div class="wish-form">
+        <div>
+          <label for="wishName">祝福人 · 水生名称</label>
+          <input type="text" id="wishName" placeholder="例：未脱水的小鱼" maxlength="30" required />
+        </div>
+        <div>
+          <label for="wishInput">祝福内容</label>
+          <input type="text" id="wishInput" placeholder="例：愿你永远保有未脱水的那一部分..." maxlength="60" required />
+        </div>
         <button type="button" id="wishSubmit">放入水中</button>
       </div>
       <div class="wish-wall" id="wishWall"></div>
@@ -949,14 +1034,22 @@
     });
 
     // Wish wall
-    function addWishTag(text) {
+    function buildWishTagHtml(wish) {
+      const text = escapeHtml(wish.text || wish);
+      const author = wish.author ? escapeHtml(wish.author) : '';
+      if (author) {
+        return `<span class="wish-tag"><span class="wish-author">${author}</span><span class="wish-text">${text}</span></span>`;
+      }
+      return `<span class="wish-tag"><span class="wish-text">${text}</span></span>`;
+    }
+
+    function addWishTag(wish) {
       const empty = wishWall.querySelector('.wish-wall-empty');
       if (empty) empty.remove();
 
-      const tag = document.createElement('span');
-      tag.className = 'wish-tag';
-      tag.textContent = text;
-      wishWall.prepend(tag);
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = buildWishTagHtml(wish);
+      wishWall.prepend(wrapper.firstElementChild);
       spawnBubble(null, null, 2);
     }
 
@@ -965,14 +1058,25 @@
         wishWall.innerHTML = '<span class="wish-wall-empty">祝福墙尚空，写下第一条水下低语吧</span>';
         return;
       }
-      wishWall.innerHTML = wishes.map((w) => `<span class="wish-tag">${escapeHtml(w.text)}</span>`).join('');
+      wishWall.innerHTML = wishes.map((w) => buildWishTagHtml(w)).join('');
     }
 
     document.getElementById('wishSubmit').addEventListener('click', async () => {
+      const nameInput = document.getElementById('wishName');
       const input = document.getElementById('wishInput');
       const btn = document.getElementById('wishSubmit');
+      const author = nameInput.value.trim();
       const val = input.value.trim();
-      if (!val) return;
+
+      if (!author) {
+        alert('请留下你的水生名称，再发送祝福');
+        nameInput.focus();
+        return;
+      }
+      if (!val) {
+        input.focus();
+        return;
+      }
 
       btn.disabled = true;
 
@@ -981,12 +1085,13 @@
           throw new Error('数据库模块未加载，请强制刷新页面后重试');
         }
         if (ShuihuiDB.isConfigured()) {
-          await ShuihuiDB.submitBirthdayWish(val);
-          await recordInteraction('wish', val);
+          await ShuihuiDB.submitBirthdayWish(val, author);
+          await recordInteraction('wish', author + '：' + val);
         } else {
           bumpJoy(1);
         }
-        addWishTag(val);
+        addWishTag({ author: author, text: val });
+        nameInput.value = '';
         input.value = '';
       } catch (err) {
         alert('祝福发送失败：' + (err.message || '请稍后重试'));
@@ -997,6 +1102,10 @@
 
     document.getElementById('wishInput').addEventListener('keydown', (e) => {
       if (e.key === 'Enter') document.getElementById('wishSubmit').click();
+    });
+
+    document.getElementById('wishName').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('wishInput').focus();
     });
 
     async function loadBirthdayData() {
