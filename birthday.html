@@ -24,6 +24,7 @@
       --coral: #e8a598;
       --font-serif: 'Noto Serif SC', 'Songti SC', serif;
       --font-display: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
+      --page-width: min(1600px, 94vw);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -145,9 +146,9 @@
     }
 
     nav .inner {
-      max-width: 780px;
+      max-width: var(--page-width);
       margin: 0 auto;
-      padding: 0.85rem 1.5rem;
+      padding: 0.85rem 2rem;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -173,9 +174,9 @@
     .container {
       position: relative;
       z-index: 1;
-      max-width: 780px;
+      max-width: var(--page-width);
       margin: 0 auto;
-      padding: 0 1.5rem 4rem;
+      padding: 0 2rem 4rem;
     }
 
     /* Hero */
