@@ -276,72 +276,176 @@
 
     /* ── Birthday notice ── */
     .birthday-notice {
-      display: block;
-      margin: 1.5rem 0 0;
-      max-width: none;
-      padding: 1rem 1.25rem 1rem 1.1rem;
-      background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), rgba(94, 196, 212, 0.08));
-      border: 1px solid rgba(201, 169, 98, 0.35);
-      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      margin: 0 0 0.5rem;
+      padding: 1.15rem 1.5rem 1.15rem 0;
+      background: linear-gradient(120deg, rgba(201, 169, 98, 0.14) 0%, rgba(94, 196, 212, 0.06) 55%, rgba(10, 22, 40, 0.4) 100%);
+      border: 1px solid rgba(201, 169, 98, 0.42);
+      border-radius: 14px;
       text-decoration: none;
       color: inherit;
       text-align: left;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow:
+        0 0 0 1px rgba(201, 169, 98, 0.08) inset,
+        0 4px 24px rgba(201, 169, 98, 0.1);
+      transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
+      animation: notice-breathe 4s ease-in-out infinite;
     }
 
-    .birthday-notice::before {
+    @keyframes notice-breathe {
+      0%, 100% {
+        box-shadow:
+          0 0 0 1px rgba(201, 169, 98, 0.08) inset,
+          0 4px 24px rgba(201, 169, 98, 0.1);
+      }
+      50% {
+        box-shadow:
+          0 0 0 1px rgba(201, 169, 98, 0.12) inset,
+          0 4px 32px rgba(201, 169, 98, 0.18),
+          0 0 48px rgba(201, 169, 98, 0.06);
+      }
+    }
+
+    .birthday-notice::after {
       content: '';
       position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 10% 50%, rgba(201, 169, 98, 0.12), transparent 55%);
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
       pointer-events: none;
+      animation: notice-shimmer 8s ease-in-out infinite;
     }
 
-    .birthday-notice:hover {
-      border-color: rgba(201, 169, 98, 0.55);
-      box-shadow: 0 0 28px rgba(201, 169, 98, 0.18);
-      transform: translateY(-2px);
+    @keyframes notice-shimmer {
+      0%, 70%, 100% { left: -100%; opacity: 0; }
+      85% { opacity: 1; }
+      95% { left: 150%; opacity: 0; }
+    }
+
+    .birthday-notice-accent {
+      flex-shrink: 0;
+      width: 4px;
+      align-self: stretch;
+      margin: 0.35rem 0 0.35rem 0;
+      border-radius: 0 3px 3px 0;
+      background: linear-gradient(180deg, var(--gold), rgba(94, 196, 212, 0.6));
+      box-shadow: 0 0 12px rgba(201, 169, 98, 0.35);
+    }
+
+    .birthday-notice-icon {
+      flex-shrink: 0;
+      font-size: 1.75rem;
+      line-height: 1;
+      opacity: 0.85;
+      filter: drop-shadow(0 0 8px rgba(201, 169, 98, 0.25));
+    }
+
+    .birthday-notice-body {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .birthday-notice-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
     }
 
     .birthday-notice-label {
-      display: inline-block;
-      font-size: 0.7rem;
-      letter-spacing: 0.22em;
+      font-size: 0.68rem;
+      letter-spacing: 0.28em;
       color: var(--gold);
-      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+    }
+
+    .birthday-notice-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 6px var(--gold);
+      animation: notice-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes notice-pulse {
+      0%, 100% { opacity: 0.5; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
     }
 
     .birthday-notice-title {
       font-family: var(--font-display);
-      font-size: 1.05rem;
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
       color: var(--foam);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       margin-bottom: 0.35rem;
+      text-shadow: 0 0 20px rgba(201, 169, 98, 0.15);
     }
 
     .birthday-notice-text {
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       color: var(--text-muted);
-      line-height: 1.7;
+      line-height: 1.75;
       margin: 0;
+      max-width: 52em;
     }
 
-    .birthday-notice-arrow {
-      position: absolute;
-      right: 1.1rem;
-      top: 50%;
-      transform: translateY(-50%);
+    .birthday-notice-cta {
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+      padding: 0.55rem 1rem;
+      border: 1px solid rgba(201, 169, 98, 0.35);
+      border-radius: 2rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
       color: var(--gold);
-      font-size: 1.1rem;
-      opacity: 0.7;
-      transition: transform 0.3s, opacity 0.3s;
+      white-space: nowrap;
+      background: rgba(201, 169, 98, 0.08);
+      transition: background 0.3s, border-color 0.3s, transform 0.3s;
     }
 
-    .birthday-notice:hover .birthday-notice-arrow {
-      transform: translateY(-50%) translateX(4px);
-      opacity: 1;
+    .birthday-notice:hover {
+      border-color: rgba(201, 169, 98, 0.65);
+      transform: translateY(-2px);
+      animation: none;
+      box-shadow:
+        0 0 0 1px rgba(201, 169, 98, 0.15) inset,
+        0 8px 36px rgba(201, 169, 98, 0.2);
+    }
+
+    .birthday-notice:hover .birthday-notice-cta {
+      background: rgba(201, 169, 98, 0.16);
+      border-color: rgba(201, 169, 98, 0.55);
+      transform: translateX(3px);
+    }
+
+    @media (max-width: 700px) {
+      .birthday-notice {
+        flex-wrap: wrap;
+        padding: 1rem 1.15rem 1rem 0;
+        gap: 0.85rem;
+      }
+
+      .birthday-notice-icon {
+        font-size: 1.4rem;
+      }
+
+      .birthday-notice-cta {
+        width: 100%;
+        text-align: center;
+        margin-left: 1.15rem;
+      }
     }
 
     /* ── Sections ── */
@@ -722,12 +826,19 @@
     <!-- Hero -->
     <header class="hero reveal">
       <a href="birthday.html" class="birthday-notice">
-        <span class="birthday-notice-label">水文通告 · Notice</span>
-        <div class="birthday-notice-title">水生生物蕴涵，生日快乐</div>
-        <p class="birthday-notice-text">
-          据水下监测站报告，蕴涵同志今日完成又一轮脱水—复水循环。全体水生生物请携未干记忆与上浮气泡，前往水底庆祝页面，参与非正式水庆仪式。
-        </p>
-        <span class="birthday-notice-arrow" aria-hidden="true">→</span>
+        <span class="birthday-notice-accent" aria-hidden="true"></span>
+        <span class="birthday-notice-icon" aria-hidden="true">🎂</span>
+        <div class="birthday-notice-body">
+          <div class="birthday-notice-header">
+            <span class="birthday-notice-label">水文通告 · Notice</span>
+            <span class="birthday-notice-pulse" aria-hidden="true"></span>
+          </div>
+          <div class="birthday-notice-title">水生生物蕴涵，生日快乐</div>
+          <p class="birthday-notice-text">
+            据水下监测站报告，蕴涵同志今日完成又一轮脱水—复水循环。全体水生生物请携未干记忆与上浮气泡，前往水底庆祝页面，参与非正式水庆仪式。
+          </p>
+        </div>
+        <span class="birthday-notice-cta">前往庆祝 →</span>
       </a>
       <div class="hero-split">
         <div class="hero-left">
