@@ -721,9 +721,12 @@
     </div>
   </div>
 
-  <script src="config.js"></script>
-  <script src="db.js"></script>
+  <script src="config.js?v=2"></script>
+  <script src="db.js?v=2"></script>
   <script>
+    if (!window.ShuihuiDB || typeof ShuihuiDB.submitBirthdayWish !== 'function') {
+      console.error('ShuihuiDB 未正确加载，请强制刷新页面（Ctrl+Shift+R 或 Cmd+Shift+R）');
+    }
     const blessings = [
       '愿你的每一岁都像涨潮一样，带来意料之外的淹没与滋润。',
       '愿你在陆地与水体之间，永远保留那道尚未愈合的湿润边界。',
@@ -974,6 +977,9 @@
       btn.disabled = true;
 
       try {
+        if (!window.ShuihuiDB || typeof ShuihuiDB.submitBirthdayWish !== 'function') {
+          throw new Error('数据库模块未加载，请强制刷新页面后重试');
+        }
         if (ShuihuiDB.isConfigured()) {
           await ShuihuiDB.submitBirthdayWish(val);
           await recordInteraction('wish', val);

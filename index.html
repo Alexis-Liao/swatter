@@ -174,8 +174,25 @@
 
     /* ── Hero ── */
     .hero {
-      text-align: center;
-      padding: 5rem 0 4rem;
+      padding: 3rem 0 4rem;
+    }
+
+    .hero-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem 4rem;
+      align-items: center;
+      margin-top: 2.5rem;
+    }
+
+    .hero-left {
+      text-align: left;
+    }
+
+    .hero-right {
+      text-align: left;
+      padding-left: 3rem;
+      border-left: 1px solid rgba(126, 200, 212, 0.18);
     }
 
     .hero-badge {
@@ -186,41 +203,45 @@
       color: var(--gold);
       font-size: 0.8rem;
       letter-spacing: 0.2em;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       background: rgba(201, 169, 98, 0.08);
     }
 
     .hero h1 {
       font-family: var(--font-display);
-      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-size: clamp(3.5rem, 10vw, 7rem);
       font-weight: 400;
       color: var(--foam);
-      letter-spacing: 0.3em;
-      margin-bottom: 0.5rem;
+      letter-spacing: 0.22em;
+      margin-bottom: 0.75rem;
       text-shadow: 0 0 40px var(--accent-glow);
+      line-height: 1.1;
     }
 
     .hero h1 .hero-abbr {
-      font-size: 0.45em;
-      letter-spacing: 0.2em;
+      display: block;
+      font-size: 0.38em;
+      letter-spacing: 0.35em;
       color: var(--gold);
       font-weight: 400;
-      vertical-align: middle;
-      margin-left: 0.15em;
+      margin-top: 0.15em;
+      margin-left: 0.05em;
     }
 
     .hero .subtitle {
-      font-size: 0.95rem;
+      font-size: clamp(0.9rem, 1.5vw, 1.05rem);
       color: var(--text-muted);
       letter-spacing: 0.08em;
-      margin-bottom: 2.5rem;
+      margin-bottom: 0;
+      max-width: 14em;
+      line-height: 1.8;
     }
 
     .hero .invite {
-      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
       color: var(--text);
-      max-width: 32em;
-      margin: 0 auto 1rem;
+      max-width: none;
+      margin: 0 0 0.5rem;
       line-height: 1.9;
     }
 
@@ -234,7 +255,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      margin-top: 2rem;
+      margin-top: 1.75rem;
       padding: 0.85rem 2rem;
       background: linear-gradient(135deg, rgba(94,196,212,0.2), rgba(61,139,158,0.3));
       border: 1px solid rgba(94, 196, 212, 0.4);
@@ -256,8 +277,8 @@
     /* ── Birthday notice ── */
     .birthday-notice {
       display: block;
-      margin: 1.5rem auto 0;
-      max-width: 36em;
+      margin: 1.5rem 0 0;
+      max-width: none;
       padding: 1rem 1.25rem 1rem 1.1rem;
       background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), rgba(94, 196, 212, 0.08));
       border: 1px solid rgba(201, 169, 98, 0.35);
@@ -638,10 +659,28 @@
       transform: translateY(0);
     }
 
+    @media (max-width: 900px) {
+      .hero-split {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+
+      .hero-right {
+        padding-left: 0;
+        border-left: none;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(126, 200, 212, 0.15);
+      }
+
+      .hero h1 {
+        font-size: clamp(3rem, 14vw, 5rem);
+      }
+    }
+
     @media (max-width: 600px) {
       .nav-links { display: none; }
-      .hero { padding: 3rem 0 2.5rem; }
-      .hero h1 { letter-spacing: 0.15em; }
+      .hero { padding: 2.5rem 0 2rem; }
+      .hero h1 { letter-spacing: 0.12em; }
       section { padding: 2.5rem 0; }
     }
   </style>
@@ -690,14 +729,20 @@
         </p>
         <span class="birthday-notice-arrow" aria-hidden="true">→</span>
       </a>
-      <div class="hero-badge">第十届 · 会员招募</div>
-      <h1>水会<span class="hero-abbr">SAW</span></h1>
-      <p class="subtitle">山寨水会 · Shanzhai Association of Water</p>
-      <p class="invite">
-        山寨水会邀请您成为<em>第十届会员</em>！<br />
-        新老会员申请入会，详见文末
-      </p>
-      <a href="#apply" class="hero-cta">潜入水底，申请入会 ↓</a>
+      <div class="hero-split">
+        <div class="hero-left">
+          <h1>水会<span class="hero-abbr">SAW</span></h1>
+          <p class="subtitle">山寨水会 · Shanzhai Association of Water</p>
+        </div>
+        <div class="hero-right">
+          <div class="hero-badge">第十届 · 会员招募</div>
+          <p class="invite">
+            山寨水会邀请您成为<em>第十届会员</em>！<br />
+            新老会员申请入会，详见文末
+          </p>
+          <a href="#apply" class="hero-cta">潜入水底，申请入会 ↓</a>
+        </div>
+      </div>
     </header>
 
     <!-- About -->
@@ -833,8 +878,8 @@
     <p style="margin-top:0.75rem; opacity:0.6;">非正式业务主管单位：山寨 MFA</p>
   </footer>
 
-  <script src="config.js"></script>
-  <script src="db.js"></script>
+  <script src="config.js?v=2"></script>
+  <script src="db.js?v=2"></script>
   <script>
     // Bubbles
     const bubblesEl = document.getElementById('bubbles');

@@ -5,7 +5,8 @@
   };
 
   function getScriptUrl() {
-    const url = window.SHUIHUI_CONFIG?.googleScriptUrl;
+    const cfg = window.SHUIHUI_CONFIG;
+    const url = cfg && cfg.googleScriptUrl;
     if (!url || url.includes('YOUR_')) return null;
     return url;
   }
@@ -36,6 +37,8 @@
   }
 
   window.ShuihuiDB = {
+    version: 2,
+
     isConfigured() {
       return getScriptUrl() !== null;
     },
