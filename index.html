@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="山寨水会 Shanzhai Association of Water — 推动水文研究，开展水学术、水技术、水艺术交流的非学术性水生研究组织" />
+  <title>水会 · 山寨水会 Shanzhai Association of Water</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --deep: #0a1628;
+      --ocean: #0d2847;
+      --water: #1a4a6e;
+      --aqua: #3d8b9e;
+      --foam: #7ec8d4;
+      --mist: rgba(126, 200, 212, 0.15);
+      --surface: rgba(255, 255, 255, 0.06);
+      --surface-hover: rgba(255, 255, 255, 0.1);
+      --text: #d4eaf0;
+      --text-muted: #8bb8c8;
+      --accent: #5ec4d4;
+      --accent-glow: rgba(94, 196, 212, 0.35);
+      --gold: #c9a962;
+      --font-serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+      --font-display: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-color: var(--aqua) var(--deep);
+    }
+
+    body {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text);
+      background: var(--deep);
+      overflow-x: hidden;
+    }
+
+    /* ── Water background ── */
+    .water-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(26, 74, 110, 0.6) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(61, 139, 158, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 30% at 80% 90%, rgba(94, 196, 212, 0.15) 0%, transparent 50%),
+        linear-gradient(180deg, var(--deep) 0%, var(--ocean) 40%, #0f3050 100%);
+    }
+
+    .waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .waves svg {
+      position: absolute;
+      bottom: 0;
+      width: 200%;
+      height: 100%;
+      animation: wave-drift 12s linear infinite;
+    }
+
+    .waves svg:nth-child(2) {
+      animation-duration: 18s;
+      animation-direction: reverse;
+      opacity: 0.5;
+      bottom: 10px;
+    }
+
+    .waves svg:nth-child(3) {
+      animation-duration: 24s;
+      opacity: 0.3;
+      bottom: 20px;
+    }
+
+    @keyframes wave-drift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Bubbles */
+    .bubbles {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bubble {
+      position: absolute;
+      bottom: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(126,200,212,0.08));
+      border: 1px solid rgba(126, 200, 212, 0.15);
+      animation: rise linear infinite;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 0.6; }
+      100% { transform: translateY(-110vh) translateX(30px); opacity: 0; }
+    }
+
+    /* ── Layout ── */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(10, 22, 40, 0.75);
+      border-bottom: 1px solid rgba(126, 200, 212, 0.12);
+    }
+
+    nav .inner {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0.85rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--foam);
+      text-decoration: none;
+      letter-spacing: 0.15em;
+      text-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── Hero ── */
+    .hero {
+      text-align: center;
+      padding: 5rem 0 4rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      border: 1px solid rgba(201, 169, 98, 0.4);
+      border-radius: 2rem;
+      color: var(--gold);
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      margin-bottom: 2rem;
+      background: rgba(201, 169, 98, 0.08);
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 400;
+      color: var(--foam);
+      letter-spacing: 0.3em;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 40px var(--accent-glow);
+    }
+
+    .hero .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero .invite {
+      font-size: clamp(1.1rem, 3vw, 1.35rem);
+      color: var(--text);
+      max-width: 32em;
+      margin: 0 auto 1rem;
+      line-height: 1.9;
+    }
+
+    .hero .invite em {
+      font-style: normal;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      padding: 0.85rem 2rem;
+      background: linear-gradient(135deg, rgba(94,196,212,0.2), rgba(61,139,158,0.3));
+      border: 1px solid rgba(94, 196, 212, 0.4);
+      border-radius: 3rem;
+      color: var(--foam);
+      text-decoration: none;
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+      box-shadow: 0 0 30px rgba(94, 196, 212, 0.15);
+    }
+
+    .hero-cta:hover {
+      background: linear-gradient(135deg, rgba(94,196,212,0.35), rgba(61,139,158,0.45));
+      box-shadow: 0 0 40px rgba(94, 196, 212, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* ── Birthday notice ── */
+    .birthday-notice {
+      display: block;
+      margin: 1.5rem auto 0;
+      max-width: 36em;
+      padding: 1rem 1.25rem 1rem 1.1rem;
+      background: linear-gradient(135deg, rgba(201, 169, 98, 0.1), rgba(94, 196, 212, 0.08));
+      border: 1px solid rgba(201, 169, 98, 0.35);
+      border-radius: 12px;
+      text-decoration: none;
+      color: inherit;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+    }
+
+    .birthday-notice::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 10% 50%, rgba(201, 169, 98, 0.12), transparent 55%);
+      pointer-events: none;
+    }
+
+    .birthday-notice:hover {
+      border-color: rgba(201, 169, 98, 0.55);
+      box-shadow: 0 0 28px rgba(201, 169, 98, 0.18);
+      transform: translateY(-2px);
+    }
+
+    .birthday-notice-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      margin-bottom: 0.35rem;
+    }
+
+    .birthday-notice-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      color: var(--foam);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.35rem;
+    }
+
+    .birthday-notice-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .birthday-notice-arrow {
+      position: absolute;
+      right: 1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-size: 1.1rem;
+      opacity: 0.7;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .birthday-notice:hover .birthday-notice-arrow {
+      transform: translateY(-50%) translateX(4px);
+      opacity: 1;
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 3.5rem 0;
+      border-top: 1px solid rgba(126, 200, 212, 0.08);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      color: var(--aqua);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 400;
+      color: var(--foam);
+      letter-spacing: 0.12em;
+      margin-bottom: 1.75rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin: 2rem 0 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    h4 {
+      font-size: 1rem;
+      color: var(--foam);
+      font-weight: 600;
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; color: var(--text); }
+
+    .intro-text {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      border-left: 2px solid rgba(94, 196, 212, 0.3);
+      padding-left: 1.25rem;
+      margin-bottom: 0;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid rgba(126, 200, 212, 0.12);
+      border-radius: 12px;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .card:hover {
+      background: var(--surface-hover);
+      border-color: rgba(126, 200, 212, 0.22);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      color: var(--foam);
+      letter-spacing: 0.08em;
+      margin-bottom: 1rem;
+    }
+
+    /* Lists */
+    ol, ul {
+      padding-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+
+    li::marker { color: var(--aqua); }
+
+    .nested-list {
+      list-style: none;
+      padding-left: 0;
+      margin-top: 0.75rem;
+    }
+
+    .nested-list li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .nested-list li::before {
+      content: '～';
+      position: absolute;
+      left: 0;
+      color: var(--aqua);
+    }
+
+    /* Rights grid */
+    .rights-grid {
+      display: grid;
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+    }
+
+    .right-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      padding: 0.85rem 1rem;
+      background: rgba(94, 196, 212, 0.06);
+      border-radius: 8px;
+      border: 1px solid rgba(94, 196, 212, 0.1);
+    }
+
+    .right-item .icon {
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .right-item p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .benefits {
+      margin-top: 1.5rem;
+      padding: 1.25rem 1.5rem;
+      background: rgba(201, 169, 98, 0.06);
+      border: 1px dashed rgba(201, 169, 98, 0.25);
+      border-radius: 10px;
+    }
+
+    .benefits h4 {
+      color: var(--gold);
+      margin-top: 0;
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+    }
+
+    .benefits ol { margin-bottom: 0; }
+
+    .benefits li { color: var(--text-muted); font-size: 0.92rem; }
+
+    /* Obligations */
+    .obligation-list {
+      list-style: none;
+      padding: 0;
+      counter-reset: obligation;
+    }
+
+    .obligation-list li {
+      counter-increment: obligation;
+      position: relative;
+      padding: 1rem 1rem 1rem 3rem;
+      margin-bottom: 0.75rem;
+      background: var(--surface);
+      border-radius: 8px;
+      border: 1px solid rgba(126, 200, 212, 0.1);
+    }
+
+    .obligation-list li::before {
+      content: counter(obligation);
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--deep);
+      background: var(--accent);
+      border-radius: 50%;
+      font-weight: 700;
+    }
+
+    /* Apply section */
+    .apply-section {
+      text-align: center;
+      padding: 4rem 0 6rem;
+    }
+
+    .apply-section h2 { margin-bottom: 1rem; }
+
+    .apply-section p {
+      color: var(--text-muted);
+      max-width: 28em;
+      margin: 0 auto 2rem;
+    }
+
+    .apply-form {
+      max-width: 420px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(126, 200, 212, 0.2);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-serif);
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(94, 196, 212, 0.12);
+    }
+
+    .form-group select option { background: var(--ocean); }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: linear-gradient(135deg, var(--aqua), var(--water));
+      border: none;
+      border-radius: 8px;
+      color: var(--foam);
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .submit-btn:hover {
+      box-shadow: 0 0 30px var(--accent-glow);
+      transform: translateY(-1px);
+    }
+
+    .form-note {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 1rem;
+      opacity: 0.7;
+    }
+
+    /* Footer */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 1.5rem 3rem;
+      border-top: 1px solid rgba(126, 200, 212, 0.08);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer .org-name {
+      font-family: var(--font-display);
+      color: var(--foam);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.5rem;
+    }
+
+    footer a {
+      color: var(--aqua);
+      text-decoration: none;
+    }
+
+    footer a:hover { color: var(--accent); }
+
+    /* Reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero { padding: 3rem 0 2.5rem; }
+      .hero h1 { letter-spacing: 0.15em; }
+      section { padding: 2.5rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="water-bg" aria-hidden="true"></div>
+
+  <div class="waves" aria-hidden="true">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,60 C150,120 350,0 600,60 C850,120 1050,0 1200,60 L1200,120 L0,120 Z" fill="rgba(26,74,110,0.4)"/>
+    </svg>
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,80 C200,20 400,100 600,50 C800,0 1000,80 1200,40 L1200,120 L0,120 Z" fill="rgba(61,139,158,0.25)"/>
+    </svg>
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,90 C300,30 500,100 800,60 C950,40 1100,90 1200,70 L1200,120 L0,120 Z" fill="rgba(94,196,212,0.12)"/>
+    </svg>
+  </div>
+
+  <div class="bubbles" id="bubbles" aria-hidden="true"></div>
+
+  <nav>
+    <div class="inner">
+      <a href="#" class="nav-logo">水会</a>
+      <ul class="nav-links">
+        <li><a href="#about">关于</a></li>
+        <li><a href="#conditions">入会条件</a></li>
+        <li><a href="#types">会员类型</a></li>
+        <li><a href="#rights">权利义务</a></li>
+        <li><a href="#apply">申请入会</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <header class="hero reveal">
+      <a href="birthday.html" class="birthday-notice">
+        <span class="birthday-notice-label">水文通告 · Notice</span>
+        <div class="birthday-notice-title">水生生物蕴涵，生日快乐</div>
+        <p class="birthday-notice-text">
+          据水下监测站报告，蕴涵同志今日完成又一轮脱水—复水循环。全体水生生物请携未干记忆与上浮气泡，前往水底庆祝页面，参与非正式水庆仪式。
+        </p>
+        <span class="birthday-notice-arrow" aria-hidden="true">→</span>
+      </a>
+      <div class="hero-badge">第十届 · 会员招募</div>
+      <h1>水会</h1>
+      <p class="subtitle">山寨水会 · Shanzhai Association of Water</p>
+      <p class="invite">
+        山寨水会邀请您成为<em>第十届会员</em>！<br />
+        新老会员申请入会，详见文末
+      </p>
+      <a href="#apply" class="hero-cta">潜入水底，申请入会 ↓</a>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="reveal">
+      <p class="section-label">About</p>
+      <h2>关于水会</h2>
+      <p class="intro-text">
+        山寨水会（Shanzhai Association of Water）是山寨工作者自愿结成的非学术性水生研究组织，接受非正式业务主管单位山寨MFA的指导和监督管理。主要任务是推动水文研究，开展国内外水学术、水技术、水艺术交流；编著出版水刊和独立出版物（Zine）；开展水疗服务活动和普及水文知识。
+      </p>
+    </section>
+
+    <!-- Conditions -->
+    <section id="conditions" class="reveal">
+      <p class="section-label">Membership</p>
+      <h2>（一）申请入会条件</h2>
+      <ol>
+        <li>不拥护陆地干货章程；</li>
+        <li>有加入水会强烈或微弱的意愿；</li>
+        <li>无法迷信学术理论，不从事或叛逆地从事相关教学或研究工作。</li>
+      </ol>
+    </section>
+
+    <!-- Types -->
+    <section id="types" class="reveal">
+      <p class="section-label">Types</p>
+      <h2>（二）会员类型</h2>
+
+      <div class="card">
+        <div class="card-title">1 · 普通会员</div>
+        <ul class="nested-list">
+          <li>以流动的方式生存，没有所属单位、没有固定地址、无法被现成容器定义形状的水生生物；</li>
+          <li>热衷于在当代生活的浑水与泥沙中搅动漩涡，打捞那些无用、荒诞或被放逐的沉淀物的打捞员；</li>
+          <li>固执地相信"集结"的力量，试图以"单位"之名在水底粘合泥沙、构筑临时生态集群与水域实验场的造礁生物。</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title">2 · 学生会员</div>
+        <p>对陆地理论感到厌倦，试图将身体重新浸入水体，在水文游戏与水疗抚慰中练习"如何漂浮"与"如何下沉"的未脱水陆地生物。</p>
+      </div>
+    </section>
+
+    <!-- Rights & Obligations -->
+    <section id="rights" class="reveal">
+      <p class="section-label">Rights &amp; Duties</p>
+      <h2>（三）会员的权利与义务</h2>
+
+      <h3>1 · 会员的权利</h3>
+      <div class="rights-grid">
+        <div class="right-item">
+          <span class="icon">🌊</span>
+          <p>组织水学术会议，对其他水货发表口水话，并提交水文检测报告</p>
+        </div>
+        <div class="right-item">
+          <span class="icon">💧</span>
+          <p>开展水疗服务，使用任何液体对陆地生物进行补完</p>
+        </div>
+        <div class="right-item">
+          <span class="icon">📖</span>
+          <p>普及水文知识，对任何水域、水体展开不限形式的水研究</p>
+        </div>
+        <div class="right-item">
+          <span class="icon">🧪</span>
+          <p>进行水实验，以水为媒介开展各类文字、身体与物理小实验</p>
+        </div>
+        <div class="right-item">
+          <span class="icon">🎮</span>
+          <p>发明水游戏，在水边、船上、水中央创造与水同乐的游戏</p>
+        </div>
+        <div class="right-item">
+          <span class="icon">🫧</span>
+          <p>与其他水生生物自然形成新的水会，对已有水会进行挑战和批评</p>
+        </div>
+      </div>
+
+      <div class="benefits">
+        <h4>会员在学会水下呼吸后，将获得以下权益</h4>
+        <ol type="a">
+          <li>获得水生生物证明——腮</li>
+          <li>获得关于烂天使、山寨家庭、纯爱诊所的记忆</li>
+          <li>延迟录取其他任何正式学术会议和培训</li>
+          <li>延迟正式发表物的发表进度</li>
+        </ol>
+      </div>
+
+      <h3>2 · 会员的义务</h3>
+      <ol class="obligation-list">
+        <li>不断改变本会章程，让它越来越不像陆地生物会写出来的无聊东西</li>
+        <li>让其他会员和你一起工作</li>
+        <li>时不时下水游泳，以表明你没有成为一个陆地生物</li>
+        <li>时不时向其他水生生物发放礼物</li>
+        <li>在陆地生物耳边低语，诱惑 ta 们成为水生生物</li>
+      </ol>
+    </section>
+
+    <!-- Apply -->
+    <section id="apply" class="apply-section reveal">
+      <p class="section-label">Join Us</p>
+      <h2>申请入会</h2>
+      <p>填写以下信息，我们将通过水文信号与您取得联系。无需陆地身份证明，只需一颗尚未完全脱水的心。</p>
+
+      <form class="apply-form" id="applyForm">
+        <div class="form-group">
+          <label for="name">水生名称 / 陆地曾用名</label>
+          <input type="text" id="name" name="name" placeholder="你在水中的名字" required />
+        </div>
+        <div class="form-group">
+          <label for="type">申请会员类型</label>
+          <select id="type" name="type" required>
+            <option value="">请选择...</option>
+            <option value="regular">普通会员 — 流动的水生生物</option>
+            <option value="student">学生会员 — 未脱水的陆地生物</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="contact">联系方式（邮箱 / 信号频率）</label>
+          <input type="text" id="contact" name="contact" placeholder="your@email.com" required />
+        </div>
+        <div class="form-group">
+          <label for="reason">入水宣言</label>
+          <textarea id="reason" name="reason" placeholder="简述你为何想离开陆地，潜入水底..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">提交申请 · 潜入</button>
+        <p class="form-note">* 本表单为演示用途，提交后将显示确认信息</p>
+      </form>
+    </section>
+
+  </div>
+
+  <footer>
+    <p class="org-name">山寨水会 · SAW</p>
+    <p>Shanzhai Association of Water</p>
+    <p style="margin-top:0.75rem; opacity:0.6;">非正式业务主管单位：山寨 MFA</p>
+  </footer>
+
+  <script>
+    // Bubbles
+    const bubblesEl = document.getElementById('bubbles');
+    for (let i = 0; i < 18; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      const size = Math.random() * 14 + 4;
+      b.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random() * 100}%;
+        animation-duration:${Math.random() * 8 + 6}s;
+        animation-delay:${Math.random() * 10}s;
+      `;
+      bubblesEl.appendChild(b);
+    }
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    reveals.forEach((el) => observer.observe(el));
+
+    // Form submit
+    document.getElementById('applyForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      alert(`🌊 ${name}，你的入水申请已随波传递。\n\n山寨水会将在下一次涨潮时与您联系。`);
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>
