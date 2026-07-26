@@ -11,33 +11,116 @@
     return url;
   }
 
-  async function post(payload) {
-    const url = getScriptUrl();
-    if (!url) throw new Error('NOT_CONFIGURED');
+  /** JSONP — 兼容 iOS / 移动端 Safari */
+  function jsonpRequest(params) {
+    return new Promise(function (resolve, reject) {
+      const baseUrl = getScriptUrl();
+      if (!baseUrl) {
+        reject(new Error('NOT_CONFIGURED'));
+        return;
+      }
 
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(payload),
+      const cb = '_sh_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+      const script = document.createElement('script');
+      const timer = setTimeout(function () {
+        cleanup();
+        reject(new Error('请求超时，请检查网络后重试'));
+      }, 20000);
+
+      function cleanup() {
+        clearTimeout(timer);
+        try { delete window[cb]; } catch (e) { window[cb] = undefined; }
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      window[cb] = function (result) {
+        cleanup();
+        if (result && result.ok) {
+          resolve(result.data);
+        } else {
+          reject(new Error((result && result.error) || '请求失败'));
+        }
+      };
+
+      const qs = Object.keys(params).map(function (key) {
+        var val = params[key];
+        return encodeURIComponent(key) + '=' + encodeURIComponent(val == null ? '' : val);
+      }).join('&');
+
+      script.src = baseUrl + '?' + qs + '&callback=' + encodeURIComponent(cb) + '&_=' + Date.now();
+      script.onerror = function () {
+        cleanup();
+        reject(new Error('网络请求失败'));
+      };
+      document.head.appendChild(script);
     });
-
-    const json = await res.json();
-    if (!json.ok) throw new Error(json.error || '请求失败');
-    return json;
   }
 
-  async function get(action) {
+  async function fetchGet(action) {
     const url = getScriptUrl();
-    if (!url) throw new Error('NOT_CONFIGURED');
-
-    const res = await fetch(`${url}?action=${action}`);
+    const res = await fetch(url + '?action=' + encodeURIComponent(action) + '&_=' + Date.now(), {
+      method: 'GET',
+      redirect: 'follow',
+      cache: 'no-store',
+    });
     const json = await res.json();
     if (!json.ok) throw new Error(json.error || '读取失败');
     return json.data;
   }
 
+  async function get(action) {
+    try {
+      return await jsonpRequest({ action: action });
+    } catch (jsonpErr) {
+      return fetchGet(action);
+    }
+  }
+
+  function buildSubmitParams(payload) {
+    if (payload.type === 'birthday_wish') {
+      return { action: 'submit', type: 'birthday_wish', text: payload.text };
+    }
+    if (payload.type === 'birthday_interaction') {
+      return {
+        action: 'submit',
+        type: 'birthday_interaction',
+        interaction: payload.action,
+        detail: payload.detail || '',
+      };
+    }
+    return {
+      action: 'submit',
+      type: 'application',
+      name: payload.name,
+      member_type: payload.member_type,
+      contact: payload.contact,
+      reason: payload.reason || '',
+    };
+  }
+
+  async function post(payload) {
+    const url = getScriptUrl();
+    if (!url) throw new Error('NOT_CONFIGURED');
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        redirect: 'follow',
+        cache: 'no-store',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (!json.ok) throw new Error(json.error || '请求失败');
+      return json;
+    } catch (fetchErr) {
+      // 移动端 Safari POST 失败时，改用 GET + JSONP
+      await jsonpRequest(buildSubmitParams(payload));
+    }
+  }
+
   window.ShuihuiDB = {
-    version: 2,
+    version: 3,
 
     isConfigured() {
       return getScriptUrl() !== null;
@@ -47,17 +130,18 @@
       return TYPE_LABELS[value] || value;
     },
 
-    async submitApplication({ name, member_type, contact, reason }) {
+    async submitApplication(data) {
       await post({
-        name: name.trim(),
-        member_type,
-        contact: contact.trim(),
-        reason: reason?.trim() || '',
+        name: data.name.trim(),
+        member_type: data.member_type,
+        contact: data.contact.trim(),
+        reason: data.reason ? data.reason.trim() : '',
       });
     },
 
     async listApplications() {
-      return get('list');
+      var data = await get('list');
+      return data || [];
     },
 
     async getBirthdayData() {
@@ -71,7 +155,7 @@
     async logBirthdayInteraction(action, detail) {
       await post({
         type: 'birthday_interaction',
-        action,
+        action: action,
         detail: detail || '',
       });
     },

@@ -17,16 +17,55 @@ const SHEETS = {
 
 function doGet(e) {
   const action = e.parameter.action;
+  const callback = e.parameter.callback;
 
-  if (action === 'list') {
-    return jsonOutput({ ok: true, data: getPublicApplications() });
+  let result;
+  try {
+    if (action === 'list') {
+      result = { ok: true, data: getPublicApplications() };
+    } else if (action === 'birthday') {
+      result = { ok: true, data: getBirthdayData() };
+    } else if (action === 'submit') {
+      handleSubmitViaGet_(e.parameter);
+      result = { ok: true };
+    } else {
+      result = { ok: false, error: 'Unknown action' };
+    }
+  } catch (err) {
+    result = { ok: false, error: String(err) };
   }
 
-  if (action === 'birthday') {
-    return jsonOutput({ ok: true, data: getBirthdayData() });
+  return respond_(result, callback);
+}
+
+function handleSubmitViaGet_(params) {
+  const type = params.type;
+
+  if (type === 'birthday_wish') {
+    appendBirthdayWish({ text: params.text });
+    return;
   }
 
-  return jsonOutput({ ok: false, error: 'Unknown action' });
+  if (type === 'birthday_interaction') {
+    appendBirthdayInteraction({ action: params.interaction, detail: params.detail });
+    return;
+  }
+
+  appendApplication({
+    name: params.name,
+    member_type: params.member_type,
+    contact: params.contact,
+    reason: params.reason,
+  });
+}
+
+function respond_(result, callback) {
+  if (callback) {
+    return ContentService
+      .createTextOutput(callback + '(' + JSON.stringify(result) + ')')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return jsonOutput(result);
 }
 
 function doPost(e) {
