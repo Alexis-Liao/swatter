@@ -11,6 +11,35 @@
     return url;
   }
 
+  function isNetworkError(err) {
+    const msg = String((err && err.message) || err || '');
+    return (
+      msg.includes('Failed to fetch') ||
+      msg.includes('NetworkError') ||
+      msg.includes('Load failed') ||
+      msg.includes('network') ||
+      msg.includes('请求超时') ||
+      msg.includes('网络请求失败')
+    );
+  }
+
+  function sleep(ms) {
+    return new Promise(function (resolve) { setTimeout(resolve, ms); });
+  }
+
+  async function withRetry(fn, retries) {
+    var lastErr;
+    for (var i = 0; i <= retries; i++) {
+      try {
+        return await fn();
+      } catch (err) {
+        lastErr = err;
+        if (i < retries) await sleep(800 * (i + 1));
+      }
+    }
+    throw lastErr;
+  }
+
   /** JSONP — 兼容 iOS / 移动端 Safari */
   function jsonpRequest(params) {
     return new Promise(function (resolve, reject) {
@@ -25,7 +54,7 @@
       const timer = setTimeout(function () {
         cleanup();
         reject(new Error('请求超时，请检查网络后重试'));
-      }, 20000);
+      }, 30000);
 
       function cleanup() {
         clearTimeout(timer);
@@ -56,6 +85,10 @@
     });
   }
 
+  function jsonpRequestWithRetry(params) {
+    return withRetry(function () { return jsonpRequest(params); }, 2);
+  }
+
   async function fetchGet(action) {
     const url = getScriptUrl();
     const res = await fetch(url + '?action=' + encodeURIComponent(action) + '&_=' + Date.now(), {
@@ -69,16 +102,23 @@
   }
 
   async function get(action) {
-    try {
-      return await jsonpRequest({ action: action });
-    } catch (jsonpErr) {
-      return fetchGet(action);
-    }
+    return withRetry(async function () {
+      try {
+        return await jsonpRequest({ action: action });
+      } catch (jsonpErr) {
+        return fetchGet(action);
+      }
+    }, 2);
   }
 
   function buildSubmitParams(payload) {
     if (payload.type === 'birthday_wish') {
-      return { action: 'submit', type: 'birthday_wish', text: payload.text, author: payload.author };
+      return {
+        action: 'submit',
+        type: 'birthday_wish',
+        text: payload.text,
+        author: payload.author,
+      };
     }
     if (payload.type === 'birthday_interaction') {
       return {
@@ -114,13 +154,13 @@
       if (!json.ok) throw new Error(json.error || '请求失败');
       return json;
     } catch (fetchErr) {
-      // 移动端 Safari POST 失败时，改用 GET + JSONP
-      await jsonpRequest(buildSubmitParams(payload));
+      if (!isNetworkError(fetchErr)) throw fetchErr;
+      await jsonpRequestWithRetry(buildSubmitParams(payload));
     }
   }
 
   window.ShuihuiDB = {
-    version: 3,
+    version: 4,
 
     isConfigured() {
       return getScriptUrl() !== null;
@@ -151,8 +191,8 @@
     async submitBirthdayWish(text, author) {
       await post({
         type: 'birthday_wish',
-        text: text.trim(),
-        author: (author || '').trim(),
+        text: String(text || '').trim(),
+        author: String(author || '').trim(),
       });
     },
 

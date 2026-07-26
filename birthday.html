@@ -806,8 +806,8 @@
     </div>
   </div>
 
-  <script src="config.js?v=3"></script>
-  <script src="db.js?v=3"></script>
+  <script src="config.js?v=4"></script>
+  <script src="db.js?v=4"></script>
   <script>
     if (!window.ShuihuiDB || typeof ShuihuiDB.submitBirthdayWish !== 'function') {
       console.error('ShuihuiDB 未正确加载，请强制刷新页面（Ctrl+Shift+R 或 Cmd+Shift+R）');
@@ -1061,12 +1061,19 @@
       wishWall.innerHTML = wishes.map((w) => buildWishTagHtml(w)).join('');
     }
 
+    function readFieldValue(el) {
+      if (document.activeElement === el) el.blur();
+      return el.value.trim();
+    }
+
     document.getElementById('wishSubmit').addEventListener('click', async () => {
       const nameInput = document.getElementById('wishName');
       const input = document.getElementById('wishInput');
       const btn = document.getElementById('wishSubmit');
-      const author = nameInput.value.trim();
-      const val = input.value.trim();
+
+      await sleep(50);
+      const author = readFieldValue(nameInput);
+      const val = readFieldValue(input);
 
       if (!author) {
         alert('请留下你的水生名称，再发送祝福');
@@ -1108,16 +1115,29 @@
       if (e.key === 'Enter') document.getElementById('wishInput').focus();
     });
 
+    function sleep(ms) {
+      return new Promise(function (resolve) { setTimeout(resolve, ms); });
+    }
+
     async function loadBirthdayData() {
       if (!ShuihuiDB.isConfigured()) return;
 
+      const joyEl = document.getElementById('joyCount');
+      const prevJoy = joyEl.textContent;
+
       try {
+        joyEl.textContent = '…';
         const data = await ShuihuiDB.getBirthdayData();
         setJoyCount(data.totalJoy || 0);
         renderWishes(data.wishes || []);
         renderRecentBlessings(data.recentBlessings || []);
       } catch (err) {
+        joyEl.textContent = prevJoy;
         console.warn('加载生日数据失败', err);
+        if (!wishWall.querySelector('.wish-tag')) {
+          wishWall.innerHTML = '<span class="wish-wall-empty">加载失败，<button type="button" id="retryLoad" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;">点击重试</button></span>';
+          document.getElementById('retryLoad').addEventListener('click', loadBirthdayData);
+        }
       }
     }
 

@@ -42,7 +42,7 @@ function handleSubmitViaGet_(params) {
   const type = params.type;
 
   if (type === 'birthday_wish') {
-    appendBirthdayWish({ text: params.text });
+    appendBirthdayWish({ text: params.text, author: params.author });
     return;
   }
 
@@ -160,10 +160,21 @@ function ensureWishSheet_() {
 }
 
 function parseWishRow_(row, index) {
-  if (row[1] === 'text' || (row[2] === undefined && row[1] !== undefined && String(row[1]).length > 0)) {
-    return { id: index + 1, created_at: row[0], author: null, text: row[1] };
+  var hasAuthorColumn = row.length >= 3 && row[2] !== undefined && row[2] !== '';
+  if (hasAuthorColumn) {
+    return {
+      id: index + 1,
+      created_at: row[0],
+      author: row[1] ? String(row[1]) : null,
+      text: row[2] ? String(row[2]) : '',
+    };
   }
-  return { id: index + 1, created_at: row[0], author: row[1] || null, text: row[2] };
+  return {
+    id: index + 1,
+    created_at: row[0],
+    author: null,
+    text: row[1] ? String(row[1]) : '',
+  };
 }
 
 function appendBirthdayWish(data) {

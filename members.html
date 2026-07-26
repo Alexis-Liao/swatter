@@ -308,8 +308,8 @@
     <p style="margin-top:0.5rem;"><a href="index.html">返回主页</a></p>
   </footer>
 
-  <script src="config.js?v=3"></script>
-  <script src="db.js?v=3"></script>
+  <script src="config.js?v=4"></script>
+  <script src="db.js?v=4"></script>
   <script>
     const content = document.getElementById('content');
     const statsBar = document.getElementById('statsBar');
@@ -392,7 +392,8 @@
         const list = await ShuihuiDB.listApplications();
         renderMembers(list);
       } catch (err) {
-        renderError(err.message || '无法读取会员数据，请检查 Google Apps Script 是否已部署且 config.js 已配置。');
+        renderError(err.message || '无法读取会员数据，请检查网络后 <button type="button" id="retryMembers" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;">点击重试</button>');
+        document.getElementById('retryMembers')?.addEventListener('click', load);
       }
     }
 
