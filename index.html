@@ -182,7 +182,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 3rem 4rem;
       align-items: center;
-      margin-top: 2.5rem;
+      margin-top: 0;
     }
 
     .hero-left {
@@ -228,6 +228,124 @@
       margin-left: 0.05em;
     }
 
+    /* ── Hidden vortex portal (hover 水会) ── */
+    .shuihui-trigger {
+      position: relative;
+      display: inline-block;
+      cursor: default;
+      transition: text-shadow 0.4s;
+    }
+
+    .shuihui-trigger.hovering {
+      text-shadow: 0 0 30px var(--accent-glow);
+    }
+
+    .shuihui-trigger.charged {
+      text-shadow: 0 0 45px rgba(201, 169, 98, 0.35), 0 0 60px var(--accent-glow);
+    }
+
+    .shuihui-trigger.hovering::after {
+      content: '';
+      position: absolute;
+      bottom: 0.05em;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--accent));
+      animation: hover-progress 1.8s linear forwards;
+      border-radius: 1px;
+    }
+
+    @keyframes hover-progress {
+      from { width: 0; opacity: 0.6; }
+      to { width: 100%; opacity: 1; }
+    }
+
+    .vortex-portal {
+      position: absolute;
+      left: calc(100% + 0.75rem);
+      top: 50%;
+      transform: translateY(-50%) scale(0.2);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.34, 1.4, 0.64, 1);
+      z-index: 20;
+    }
+
+    .vortex-portal.visible {
+      opacity: 1;
+      transform: translateY(-50%) scale(1);
+      pointer-events: auto;
+    }
+
+    .vortex-link {
+      display: block;
+      width: 76px;
+      height: 76px;
+      position: relative;
+      text-decoration: none;
+    }
+
+    .vortex-link:hover .vortex-core {
+      box-shadow: inset 0 0 18px rgba(94, 196, 212, 0.55), 0 0 24px rgba(201, 169, 98, 0.25);
+    }
+
+    .vortex-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      border-top-color: rgba(201, 169, 98, 0.85);
+      border-right-color: rgba(94, 196, 212, 0.45);
+      animation: vortex-spin 2.2s linear infinite;
+    }
+
+    .vortex-ring-2 {
+      inset: 9px;
+      animation-direction: reverse;
+      animation-duration: 1.5s;
+      border-top-color: var(--accent);
+      border-right-color: rgba(201, 169, 98, 0.35);
+    }
+
+    @keyframes vortex-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .vortex-core {
+      position: absolute;
+      inset: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(94, 196, 212, 0.35) 0%, rgba(10, 22, 40, 0.85) 70%);
+      box-shadow: inset 0 0 14px rgba(94, 196, 212, 0.4);
+      transition: box-shadow 0.3s;
+    }
+
+    .vortex-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      .vortex-portal {
+        left: 0;
+        top: calc(100% + 0.5rem);
+        transform: scale(0.2);
+      }
+
+      .vortex-portal.visible {
+        transform: scale(1);
+      }
+    }
+
+    /* ── Hero subtitle ── */
     .hero .subtitle {
       font-size: clamp(0.9rem, 1.5vw, 1.05rem);
       color: var(--text-muted);
@@ -272,180 +390,6 @@
       background: linear-gradient(135deg, rgba(94,196,212,0.35), rgba(61,139,158,0.45));
       box-shadow: 0 0 40px rgba(94, 196, 212, 0.3);
       transform: translateY(-2px);
-    }
-
-    /* ── Birthday notice ── */
-    .birthday-notice {
-      display: flex;
-      align-items: center;
-      gap: 1.25rem;
-      margin: 0 0 0.5rem;
-      padding: 1.15rem 1.5rem 1.15rem 0;
-      background: linear-gradient(120deg, rgba(201, 169, 98, 0.14) 0%, rgba(94, 196, 212, 0.06) 55%, rgba(10, 22, 40, 0.4) 100%);
-      border: 1px solid rgba(201, 169, 98, 0.42);
-      border-radius: 14px;
-      text-decoration: none;
-      color: inherit;
-      text-align: left;
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      box-shadow:
-        0 0 0 1px rgba(201, 169, 98, 0.08) inset,
-        0 4px 24px rgba(201, 169, 98, 0.1);
-      transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
-      animation: notice-breathe 4s ease-in-out infinite;
-    }
-
-    @keyframes notice-breathe {
-      0%, 100% {
-        box-shadow:
-          0 0 0 1px rgba(201, 169, 98, 0.08) inset,
-          0 4px 24px rgba(201, 169, 98, 0.1);
-      }
-      50% {
-        box-shadow:
-          0 0 0 1px rgba(201, 169, 98, 0.12) inset,
-          0 4px 32px rgba(201, 169, 98, 0.18),
-          0 0 48px rgba(201, 169, 98, 0.06);
-      }
-    }
-
-    .birthday-notice::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 60%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
-      pointer-events: none;
-      animation: notice-shimmer 8s ease-in-out infinite;
-    }
-
-    @keyframes notice-shimmer {
-      0%, 70%, 100% { left: -100%; opacity: 0; }
-      85% { opacity: 1; }
-      95% { left: 150%; opacity: 0; }
-    }
-
-    .birthday-notice-accent {
-      flex-shrink: 0;
-      width: 4px;
-      align-self: stretch;
-      margin: 0.35rem 0 0.35rem 0;
-      border-radius: 0 3px 3px 0;
-      background: linear-gradient(180deg, var(--gold), rgba(94, 196, 212, 0.6));
-      box-shadow: 0 0 12px rgba(201, 169, 98, 0.35);
-    }
-
-    .birthday-notice-icon {
-      flex-shrink: 0;
-      font-size: 1.75rem;
-      line-height: 1;
-      opacity: 0.85;
-      filter: drop-shadow(0 0 8px rgba(201, 169, 98, 0.25));
-    }
-
-    .birthday-notice-body {
-      flex: 1;
-      min-width: 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    .birthday-notice-header {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .birthday-notice-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.28em;
-      color: var(--gold);
-      text-transform: uppercase;
-    }
-
-    .birthday-notice-pulse {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 6px var(--gold);
-      animation: notice-pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes notice-pulse {
-      0%, 100% { opacity: 0.5; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.1); }
-    }
-
-    .birthday-notice-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
-      color: var(--foam);
-      letter-spacing: 0.1em;
-      margin-bottom: 0.35rem;
-      text-shadow: 0 0 20px rgba(201, 169, 98, 0.15);
-    }
-
-    .birthday-notice-text {
-      font-size: 0.86rem;
-      color: var(--text-muted);
-      line-height: 1.75;
-      margin: 0;
-      max-width: 52em;
-    }
-
-    .birthday-notice-cta {
-      flex-shrink: 0;
-      position: relative;
-      z-index: 1;
-      padding: 0.55rem 1rem;
-      border: 1px solid rgba(201, 169, 98, 0.35);
-      border-radius: 2rem;
-      font-size: 0.78rem;
-      letter-spacing: 0.12em;
-      color: var(--gold);
-      white-space: nowrap;
-      background: rgba(201, 169, 98, 0.08);
-      transition: background 0.3s, border-color 0.3s, transform 0.3s;
-    }
-
-    .birthday-notice:hover {
-      border-color: rgba(201, 169, 98, 0.65);
-      transform: translateY(-2px);
-      animation: none;
-      box-shadow:
-        0 0 0 1px rgba(201, 169, 98, 0.15) inset,
-        0 8px 36px rgba(201, 169, 98, 0.2);
-    }
-
-    .birthday-notice:hover .birthday-notice-cta {
-      background: rgba(201, 169, 98, 0.16);
-      border-color: rgba(201, 169, 98, 0.55);
-      transform: translateX(3px);
-    }
-
-    @media (max-width: 700px) {
-      .birthday-notice {
-        flex-wrap: wrap;
-        padding: 1rem 1.15rem 1rem 0;
-        gap: 0.85rem;
-      }
-
-      .birthday-notice-icon {
-        font-size: 1.4rem;
-      }
-
-      .birthday-notice-cta {
-        width: 100%;
-        text-align: center;
-        margin-left: 1.15rem;
-      }
     }
 
     /* ── Sections ── */
@@ -825,24 +769,22 @@
 
     <!-- Hero -->
     <header class="hero reveal">
-      <a href="birthday.html" class="birthday-notice">
-        <span class="birthday-notice-accent" aria-hidden="true"></span>
-        <span class="birthday-notice-icon" aria-hidden="true">🎂</span>
-        <div class="birthday-notice-body">
-          <div class="birthday-notice-header">
-            <span class="birthday-notice-label">水文通告 · Notice</span>
-            <span class="birthday-notice-pulse" aria-hidden="true"></span>
-          </div>
-          <div class="birthday-notice-title">水生生物蕴涵，7月26日生日快乐</div>
-          <p class="birthday-notice-text">
-            据水下监测站报告，蕴涵于7月26日完成又一轮脱水—复水循环。全体水生生物请携未干记忆与上浮气泡，前往水底庆祝页面，参与非正式水庆仪式。
-          </p>
-        </div>
-        <span class="birthday-notice-cta">前往庆祝 →</span>
-      </a>
       <div class="hero-split">
         <div class="hero-left">
-          <h1>水会<span class="hero-abbr">SAW</span></h1>
+          <h1>
+            <span class="shuihui-trigger" id="shuihuiTrigger">
+              水会
+              <span class="vortex-portal" id="vortexPortal" aria-hidden="true">
+                <a href="birthday.html" class="vortex-link" title="生日通道">
+                  <span class="vortex-ring"></span>
+                  <span class="vortex-ring vortex-ring-2"></span>
+                  <span class="vortex-core"></span>
+                  <span class="vortex-label">潜入</span>
+                </a>
+              </span>
+            </span>
+            <span class="hero-abbr">SAW</span>
+          </h1>
           <p class="subtitle">山寨水会 · Shanzhai Association of Water</p>
         </div>
         <div class="hero-right">
@@ -1014,6 +956,64 @@
       { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
     );
     reveals.forEach((el) => observer.observe(el));
+
+    // Vortex portal — hover 水会 to reveal birthday channel
+    (function () {
+      const trigger = document.getElementById('shuihuiTrigger');
+      const portal = document.getElementById('vortexPortal');
+      if (!trigger || !portal) return;
+
+      const HOVER_MS = 1800;
+      let showTimer = null;
+      let hideTimer = null;
+
+      function showPortal() {
+        trigger.classList.add('charged');
+        trigger.classList.remove('hovering');
+        portal.classList.add('visible');
+        portal.setAttribute('aria-hidden', 'false');
+      }
+
+      function hidePortal() {
+        trigger.classList.remove('hovering', 'charged');
+        portal.classList.remove('visible');
+        portal.setAttribute('aria-hidden', 'true');
+      }
+
+      function clearTimers() {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+        showTimer = null;
+      }
+
+      function onEnter() {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+        if (portal.classList.contains('visible')) return;
+        trigger.classList.add('hovering');
+        showTimer = setTimeout(showPortal, HOVER_MS);
+      }
+
+      function onLeave() {
+        clearTimers();
+        trigger.classList.remove('hovering');
+        hideTimer = setTimeout(hidePortal, 350);
+      }
+
+      trigger.addEventListener('mouseenter', onEnter);
+      trigger.addEventListener('mouseleave', onLeave);
+      portal.addEventListener('mouseenter', () => clearTimeout(hideTimer));
+      portal.addEventListener('mouseleave', onLeave);
+
+      // Mobile: long-press
+      let touchTimer = null;
+      trigger.addEventListener('touchstart', function () {
+        touchTimer = setTimeout(showPortal, HOVER_MS);
+      }, { passive: true });
+      trigger.addEventListener('touchend', function () {
+        clearTimeout(touchTimer);
+      });
+    })();
 
     // Form submit
     document.getElementById('applyForm').addEventListener('submit', async (e) => {
