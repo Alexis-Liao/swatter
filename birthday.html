@@ -84,19 +84,6 @@
       overflow: hidden;
     }
 
-    .bubble {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(126,200,212,0.08));
-      border: 1px solid rgba(126, 200, 212, 0.15);
-      animation: rise linear forwards;
-    }
-
-    @keyframes rise {
-      0% { transform: translateY(0) scale(1); opacity: 0.9; }
-      100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
-    }
-
     .ripple-layer {
       position: fixed;
       inset: 0;
@@ -808,6 +795,7 @@
 
   <script src="config.js?v=4"></script>
   <script src="db.js?v=4"></script>
+  <script src="bubbles.js?v=1"></script>
   <script>
     if (!window.ShuihuiDB || typeof ShuihuiDB.submitBirthdayWish !== 'function') {
       console.error('ShuihuiDB 未正确加载，请强制刷新页面（Ctrl+Shift+R 或 Cmd+Shift+R）');
@@ -869,21 +857,7 @@
     }
 
     function spawnBubble(x, y, count = 1) {
-      const layer = document.getElementById('bubblesLayer');
-      for (let i = 0; i < count; i++) {
-        const b = document.createElement('div');
-        b.className = 'bubble';
-        const size = Math.random() * 16 + 6;
-        const startX = x != null ? x + (Math.random() - 0.5) * 80 : Math.random() * window.innerWidth;
-        const startY = y != null ? y : window.innerHeight + 10;
-        b.style.cssText = `
-          width:${size}px; height:${size}px;
-          left:${startX}px; top:${startY}px;
-          animation-duration:${Math.random() * 4 + 3}s;
-        `;
-        layer.appendChild(b);
-        setTimeout(() => b.remove(), 7000);
-      }
+      BubbleFX.spawn(document.getElementById('bubblesLayer'), x, y, count);
     }
 
     function spawnRipple(x, y) {

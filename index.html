@@ -92,29 +92,13 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Bubbles */
+    /* Bubbles — interactive layer (styles in bubbles.js) */
     .bubbles {
       position: fixed;
       inset: 0;
-      z-index: 0;
+      z-index: 2;
       pointer-events: none;
       overflow: hidden;
-    }
-
-    .bubble {
-      position: absolute;
-      bottom: -20px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(126,200,212,0.08));
-      border: 1px solid rgba(126, 200, 212, 0.15);
-      animation: rise linear infinite;
-    }
-
-    @keyframes rise {
-      0% { transform: translateY(0) translateX(0); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 0.6; }
-      100% { transform: translateY(-110vh) translateX(30px); opacity: 0; }
     }
 
     /* ── Layout ── */
@@ -933,21 +917,9 @@
 
   <script src="config.js?v=4"></script>
   <script src="db.js?v=4"></script>
+  <script src="bubbles.js?v=1"></script>
   <script>
-    // Bubbles
-    const bubblesEl = document.getElementById('bubbles');
-    for (let i = 0; i < 18; i++) {
-      const b = document.createElement('div');
-      b.className = 'bubble';
-      const size = Math.random() * 14 + 4;
-      b.style.cssText = `
-        width:${size}px; height:${size}px;
-        left:${Math.random() * 100}%;
-        animation-duration:${Math.random() * 8 + 6}s;
-        animation-delay:${Math.random() * 10}s;
-      `;
-      bubblesEl.appendChild(b);
-    }
+    BubbleFX.initAmbient(document.getElementById('bubbles'), 18);
 
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
