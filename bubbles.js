@@ -90,7 +90,13 @@
 
     bubble.classList.add('popped');
     setTimeout(function () { bubble.remove(); }, 260);
+
+    popListeners.forEach(function (fn) {
+      fn({ bubble: bubble, x: cx, y: cy });
+    });
   }
+
+  var popListeners = [];
 
   function attachPopHandler(bubble) {
     if (!bubble.classList.contains('poppable')) return;
@@ -176,5 +182,9 @@
     },
 
     pop: popBubble,
+
+    onPop: function (fn) {
+      if (typeof fn === 'function') popListeners.push(fn);
+    },
   };
 })();

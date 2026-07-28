@@ -329,6 +329,89 @@
       }
     }
 
+    /* ── Bubble vortex (pop 3 bubbles) ── */
+    .bubble-vortex-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 22, 40, 0);
+      pointer-events: none;
+      opacity: 0;
+      transition: background 0.6s ease, opacity 0.5s ease;
+    }
+
+    .bubble-vortex-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+      background: rgba(10, 22, 40, 0.82);
+    }
+
+    .bubble-vortex-stage {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      transform: scale(0.15);
+      opacity: 0;
+      transition: transform 0.85s cubic-bezier(0.34, 1.45, 0.64, 1), opacity 0.4s ease;
+    }
+
+    .bubble-vortex-overlay.active .bubble-vortex-stage {
+      transform: scale(1);
+      opacity: 1;
+    }
+
+    .bubble-vortex-overlay.leaving .bubble-vortex-stage {
+      transform: scale(2.4);
+      opacity: 0;
+      transition: transform 0.65s ease-in, opacity 0.55s ease-in;
+    }
+
+    .bubble-vortex-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      border-top-color: rgba(201, 169, 98, 0.9);
+      border-right-color: rgba(94, 196, 212, 0.55);
+      animation: vortex-spin 1.4s linear infinite;
+    }
+
+    .bubble-vortex-ring.inner {
+      inset: 16px;
+      animation-direction: reverse;
+      animation-duration: 0.95s;
+      border-top-color: var(--accent);
+      border-right-color: rgba(201, 169, 98, 0.4);
+    }
+
+    .bubble-vortex-core {
+      position: absolute;
+      inset: 38px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(94, 196, 212, 0.5) 0%, rgba(10, 22, 40, 0.9) 72%);
+      box-shadow: inset 0 0 22px rgba(94, 196, 212, 0.55), 0 0 36px rgba(201, 169, 98, 0.2);
+    }
+
+    .bubble-vortex-label {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 1.25rem);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 0.78rem;
+      letter-spacing: 0.22em;
+      color: var(--gold);
+      opacity: 0;
+      transition: opacity 0.5s ease 0.35s;
+    }
+
+    .bubble-vortex-overlay.active .bubble-vortex-label {
+      opacity: 1;
+    }
+
     /* ── Hero subtitle ── */
     .hero .subtitle {
       font-size: clamp(0.9rem, 1.5vw, 1.05rem);
@@ -735,6 +818,15 @@
 
   <div class="bubbles" id="bubbles" aria-hidden="true"></div>
 
+  <div class="bubble-vortex-overlay" id="bubbleVortexOverlay" aria-hidden="true">
+    <div class="bubble-vortex-stage">
+      <span class="bubble-vortex-ring"></span>
+      <span class="bubble-vortex-ring inner"></span>
+      <span class="bubble-vortex-core"></span>
+      <span class="bubble-vortex-label">生日通道 · 正在打开</span>
+    </div>
+  </div>
+
   <nav>
     <div class="inner">
       <a href="#" class="nav-logo">水会</a>
@@ -917,9 +1009,38 @@
 
   <script src="config.js?v=4"></script>
   <script src="db.js?v=4"></script>
-  <script src="bubbles.js?v=1"></script>
+  <script src="bubbles.js?v=2"></script>
   <script>
     BubbleFX.initAmbient(document.getElementById('bubbles'), 18);
+
+    // Pop 3 bubbles → vortex → birthday page
+    (function () {
+      const POP_GOAL = 3;
+      const overlay = document.getElementById('bubbleVortexOverlay');
+      let popCount = 0;
+      let triggered = false;
+
+      function openBirthdayVortex() {
+        if (!overlay || triggered) return;
+        triggered = true;
+        overlay.classList.add('active');
+        overlay.setAttribute('aria-hidden', 'false');
+
+        setTimeout(function () {
+          overlay.classList.add('leaving');
+        }, 1400);
+
+        setTimeout(function () {
+          window.location.href = 'birthday.html';
+        }, 2100);
+      }
+
+      BubbleFX.onPop(function () {
+        if (triggered) return;
+        popCount += 1;
+        if (popCount >= POP_GOAL) openBirthdayVortex();
+      });
+    })();
 
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
