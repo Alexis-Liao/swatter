@@ -79,7 +79,7 @@
     .bubbles-layer {
       position: fixed;
       inset: 0;
-      z-index: 2;
+      z-index: 0;
       pointer-events: none;
       overflow: hidden;
     }
@@ -681,6 +681,7 @@
   </div>
 
   <div class="bubbles-layer" id="bubblesLayer"></div>
+  <div class="bubbles-interactive" id="bubblesInteractive" aria-hidden="true"></div>
   <div class="ripple-layer" id="rippleLayer"></div>
   <div class="confetti-layer" id="confettiLayer"></div>
 
@@ -693,7 +694,7 @@
 
   <div class="container">
 
-    <header class="celebration-hero reveal">
+    <header class="celebration-hero reveal visible">
       <div class="celebration-badge">非正式水庆仪式 · 7月26日 · 2026</div>
       <h1>生日快乐</h1>
       <p class="name">蕴涵</p>
@@ -795,7 +796,7 @@
 
   <script src="config.js?v=4"></script>
   <script src="db.js?v=4"></script>
-  <script src="bubbles.js?v=2"></script>
+  <script src="bubbles.js?v=3"></script>
   <script>
     if (!window.ShuihuiDB || typeof ShuihuiDB.submitBirthdayWish !== 'function') {
       console.error('ShuihuiDB 未正确加载，请强制刷新页面（Ctrl+Shift+R 或 Cmd+Shift+R）');
@@ -857,7 +858,13 @@
     }
 
     function spawnBubble(x, y, count = 1) {
-      BubbleFX.spawn(document.getElementById('bubblesLayer'), x, y, count);
+      BubbleFX.spawn(
+        document.getElementById('bubblesLayer'),
+        x,
+        y,
+        count,
+        document.getElementById('bubblesInteractive')
+      );
     }
 
     function spawnRipple(x, y) {
@@ -1120,12 +1127,25 @@
     // Ambient bubbles
     setInterval(() => spawnBubble(null, null, 1), 2000);
 
-    // Reveal
+    // Reveal — also force-show elements already in viewport
+    function revealInView() {
+      document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+          el.classList.add('visible');
+        }
+      });
+    }
+
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-      { threshold: 0.1 }
+      { threshold: 0.06, rootMargin: '0px 0px -20px 0px' }
     );
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    revealInView();
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) revealInView();
+    });
 
     // Joy count transition
     joyEl.style.transition = 'transform 0.2s';

@@ -9,6 +9,14 @@
       pointer-events: none;
     }
 
+    .bubbles-interactive {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
     .bubble-fx {
       position: absolute;
       border-radius: 50%;
@@ -16,7 +24,6 @@
       border: 1px solid rgba(126, 200, 212, 0.18);
       pointer-events: none;
       touch-action: manipulation;
-      will-change: transform, opacity;
     }
 
     .bubble-fx.rise {
@@ -68,6 +75,7 @@
   document.head.appendChild(style);
 
   const POP_MIN = 14;
+  var popListeners = [];
 
   function random(min, max) {
     return min + Math.random() * (max - min);
@@ -96,8 +104,6 @@
     });
   }
 
-  var popListeners = [];
-
   function attachPopHandler(bubble) {
     if (!bubble.classList.contains('poppable')) return;
 
@@ -113,7 +119,7 @@
     }, { passive: false });
   }
 
-  function createBubble(container, options) {
+  function createBubble(container, interactiveContainer, options) {
     options = options || {};
     const bubble = document.createElement('div');
     bubble.className = 'bubble-fx rise';
@@ -140,7 +146,8 @@
     bubble.style.animationDuration = duration + 's';
     bubble.style.animationDelay = delay + 's';
 
-    container.appendChild(bubble);
+    var target = isPoppable && interactiveContainer ? interactiveContainer : container;
+    target.appendChild(bubble);
     attachPopHandler(bubble);
 
     const lifetime = (duration + delay) * 1000 + 500;
@@ -154,24 +161,24 @@
   }
 
   window.BubbleFX = {
-    initAmbient: function (container, count) {
+    initAmbient: function (container, count, interactiveContainer) {
       if (!container) return;
       for (var i = 0; i < count; i++) {
-        createBubble(container, {
+        createBubble(container, interactiveContainer, {
           size: Math.random() < 0.35 ? random(POP_MIN, 32) : random(5, POP_MIN - 1),
           delay: random(0, 12),
         });
       }
     },
 
-    spawn: function (container, x, y, count) {
+    spawn: function (container, x, y, count, interactiveContainer) {
       if (!container) return;
       count = count || 1;
       for (var i = 0; i < count; i++) {
         var size = Math.random() < 0.4 ? random(POP_MIN, 28) : random(6, POP_MIN - 1);
         var startX = x != null ? x + random(-40, 40) : random(0, window.innerWidth);
         var startY = y != null ? y : window.innerHeight + 10;
-        createBubble(container, {
+        createBubble(container, interactiveContainer, {
           size: size,
           x: startX,
           y: startY,

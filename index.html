@@ -92,11 +92,11 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* Bubbles — interactive layer (styles in bubbles.js) */
+    /* Bubbles — decorative layer behind content (styles in bubbles.js) */
     .bubbles {
       position: fixed;
       inset: 0;
-      z-index: 2;
+      z-index: 0;
       pointer-events: none;
       overflow: hidden;
     }
@@ -817,6 +817,7 @@
   </div>
 
   <div class="bubbles" id="bubbles" aria-hidden="true"></div>
+  <div class="bubbles-interactive" id="bubblesInteractive" aria-hidden="true"></div>
 
   <div class="bubble-vortex-overlay" id="bubbleVortexOverlay" aria-hidden="true">
     <div class="bubble-vortex-stage">
@@ -844,7 +845,7 @@
   <div class="container">
 
     <!-- Hero -->
-    <header class="hero reveal">
+    <header class="hero reveal visible">
       <div class="hero-split">
         <div class="hero-left">
           <h1>
@@ -1009,9 +1010,13 @@
 
   <script src="config.js?v=4"></script>
   <script src="db.js?v=4"></script>
-  <script src="bubbles.js?v=2"></script>
+  <script src="bubbles.js?v=3"></script>
   <script>
-    BubbleFX.initAmbient(document.getElementById('bubbles'), 18);
+    BubbleFX.initAmbient(
+      document.getElementById('bubbles'),
+      18,
+      document.getElementById('bubblesInteractive')
+    );
 
     // Pop 3 bubbles → vortex → birthday page
     (function () {
@@ -1019,6 +1024,14 @@
       const overlay = document.getElementById('bubbleVortexOverlay');
       let popCount = 0;
       let triggered = false;
+
+      function resetVortexOverlay() {
+        if (!overlay) return;
+        overlay.classList.remove('active', 'leaving');
+        overlay.setAttribute('aria-hidden', 'true');
+        popCount = 0;
+        triggered = false;
+      }
 
       function openBirthdayVortex() {
         if (!overlay || triggered) return;
@@ -1040,15 +1053,32 @@
         popCount += 1;
         if (popCount >= POP_GOAL) openBirthdayVortex();
       });
+
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted) resetVortexOverlay();
+      });
     })();
 
-    // Scroll reveal
+    // Scroll reveal — also force-show elements already in viewport
+    function revealInView() {
+      document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+          el.classList.add('visible');
+        }
+      });
+    }
+
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver(
       (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.06, rootMargin: '0px 0px -20px 0px' }
     );
     reveals.forEach((el) => observer.observe(el));
+    revealInView();
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) revealInView();
+    });
 
     // Vortex portal — hover 水会 to reveal birthday channel
     (function () {
