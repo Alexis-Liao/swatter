@@ -1010,13 +1010,17 @@
 
   <script src="config.js?v=4"></script>
   <script src="db.js?v=4"></script>
-  <script src="bubbles.js?v=3"></script>
+  <script src="bubbles.js?v=4"></script>
   <script>
-    BubbleFX.initAmbient(
-      document.getElementById('bubbles'),
-      18,
-      document.getElementById('bubblesInteractive')
-    );
+    var bubblesBg = document.getElementById('bubbles');
+    var bubblesInteractive = document.getElementById('bubblesInteractive');
+
+    BubbleFX.initAmbient(bubblesBg, 18, bubblesInteractive);
+
+    // Keep poppable bubbles appearing on the homepage
+    setInterval(function () {
+      BubbleFX.spawn(bubblesBg, null, null, 1, bubblesInteractive);
+    }, 2800);
 
     // Pop 3 bubbles → vortex → birthday page
     (function () {
