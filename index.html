@@ -5,18 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="山寨水会第三十一届会员招募 · 2026凡学术年会「水会研究方法与应用」工作坊 — 推动水文研究的非学术性水生研究组织" />
   <title>水会 · 山寨水会 Shanzhai Association of Water</title>
-  <script>
-    (function () {
-      var base = './';
-      if (location.hostname.endsWith('github.io')) {
-        var repo = location.pathname.split('/').filter(Boolean)[0];
-        if (repo && repo.indexOf('.') === -1) base = '/' + repo + '/';
-      }
-      var el = document.createElement('base');
-      el.href = base;
-      document.head.appendChild(el);
-    })();
-  </script>
+  <script src="path.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
@@ -231,6 +220,44 @@
     }
 
     .nav-links a:hover { color: var(--accent); }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 1px solid rgba(126, 200, 212, 0.25);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      cursor: pointer;
+      flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      margin: 0 auto;
+      background: var(--foam);
+      border-radius: 1px;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
 
     /* ── Hero ── */
     .hero {
@@ -1302,7 +1329,42 @@
     }
 
     @media (max-width: 900px) {
-      .water-scape { grid-template-columns: 1fr; gap: 3rem; padding: 2.5rem 0 3.5rem; }
+      .container { padding: 0 1.25rem; }
+
+      nav .inner {
+        position: relative;
+        flex-wrap: wrap;
+        padding: 0.75rem 1.25rem;
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+      }
+
+      .nav-toggle { display: flex; }
+
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        order: 3;
+        margin: 0.35rem 0 0;
+        padding: 0.5rem 0 0.75rem;
+        gap: 0;
+        border-top: 1px solid rgba(126, 200, 212, 0.12);
+      }
+
+      .nav-links.open { display: flex; }
+
+      .nav-links li { width: 100%; }
+
+      .nav-links a {
+        display: block;
+        padding: 0.85rem 0.25rem;
+        font-size: 0.95rem;
+        border-bottom: 1px solid rgba(126, 200, 212, 0.06);
+      }
+
+      .nav-links li:last-child a { border-bottom: none; }
+
+      .water-scape { grid-template-columns: 1fr; gap: 2.25rem; padding: 2rem 0 3rem; }
       .scape-about, .scape-workshop, .scape-conditions,
       .scape-stirrer, .scape-floater, .scape-fee,
       .scape-rights, .scape-duties, .scape-note, .scape-apply {
@@ -1311,34 +1373,141 @@
       }
       .scape-piece {
         animation: none;
-        padding: 2.5rem 2.25rem;
+        padding: 2rem 1.35rem;
+        border-radius: 16px !important;
       }
       .scape-piece.island.scape-about {
-        padding: 3rem 2.5rem 2.75rem;
+        padding: 2.25rem 1.35rem 2rem;
       }
+      .scape-piece.boat {
+        padding-top: 2.75rem;
+        border-radius: 16px 16px 22px 22px !important;
+      }
+      .scape-piece.dock { padding: 2.25rem 1.35rem; }
+      .scape-piece.panel { padding: 2.25rem 1.35rem; }
+      .scape-piece.reef { padding-bottom: 2.75rem; }
 
       .hero-split {
         grid-template-columns: 1fr;
-        gap: 2.5rem;
+        gap: 2rem;
+      }
+
+      .hero-left { text-align: center; }
+
+      .hero .subtitle {
+        max-width: none;
+        margin: 0 auto;
       }
 
       .hero-right {
-        padding-left: 0;
-        border-left: none;
-        padding-top: 2rem;
+        padding: 2rem 1.5rem;
+        border-radius: 16px;
         border-top: 1px solid rgba(126, 200, 212, 0.15);
+        text-align: center;
       }
 
+      .hero-cta { justify-content: center; width: 100%; }
+
       .hero h1 {
-        font-size: clamp(3rem, 14vw, 5rem);
+        font-size: clamp(2.75rem, 12vw, 4.5rem);
       }
+
+      .rights-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .apply-form { max-width: none; }
+
+      .materials-list {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .materials-list li { text-align: center; }
+
+      .mfa-logo-stamp { display: none; }
+
+      .water-scape::after { display: none; }
     }
 
     @media (max-width: 600px) {
-      .nav-links { display: none; }
-      .hero { padding: 2.5rem 0 2rem; }
-      .hero h1 { letter-spacing: 0.12em; }
-      section { padding: 2.5rem 0; }
+      body { font-size: 1rem; }
+
+      .container { padding: 0 1rem; }
+
+      nav .inner { padding: 0.65rem 1rem; }
+
+      .nav-logo { font-size: 1.25rem; }
+
+      .mfa-logo-nav {
+        width: 32px !important;
+        height: 32px !important;
+      }
+
+      .hero { padding: 2rem 0 1.75rem; }
+
+      .hero h1 {
+        font-size: clamp(2.35rem, 14vw, 3.5rem);
+        letter-spacing: 0.1em;
+      }
+
+      .hero h1 .hero-abbr { letter-spacing: 0.2em; }
+
+      .hero .invite { font-size: 1.05rem; line-height: 1.85; }
+
+      .hero-cta {
+        padding: 0.9rem 1.25rem;
+        font-size: 0.9rem;
+      }
+
+      .water-scape { gap: 1.75rem; padding: 1.5rem 0 2.5rem; }
+
+      .scape-piece {
+        padding: 1.65rem 1.1rem;
+      }
+
+      .scape-piece h2 { font-size: 1.35rem; margin-bottom: 1rem; }
+
+      .workshop-title { font-size: 1rem; line-height: 1.7; }
+
+      .scape-type-head { font-size: 1.05rem; }
+
+      .obligation-list li {
+        padding: 0.85rem 0.85rem 0.85rem 2.75rem;
+        font-size: 0.95rem;
+      }
+
+      .obligation-list li::before {
+        left: 0.75rem;
+        top: 0.85rem;
+      }
+
+      .right-item { padding: 0.85rem; }
+
+      .right-item p { font-size: 0.9rem; }
+
+      .benefits { padding: 1rem 1.1rem; }
+
+      .form-group input,
+      .form-group select,
+      .form-group textarea {
+        font-size: 16px;
+        padding: 0.85rem 0.9rem;
+      }
+
+      .submit-btn {
+        padding: 1rem;
+        font-size: 1rem;
+      }
+
+      footer {
+        padding: 1.75rem 1rem calc(2.5rem + env(safe-area-inset-bottom));
+      }
+
+      section { padding: 2rem 0; }
+
+      .shuihui-trigger.hovering::after { display: none; }
     }
   </style>
 </head>
@@ -1372,11 +1541,16 @@
 
   <nav>
     <div class="inner">
-      <a href="#" class="nav-brand">
+      <a href="index.html" class="nav-brand">
         <img src="assets/shanzhai-mfa-logo.png?v=2" alt="山寨 MFA" class="mfa-logo mfa-logo-nav" width="38" height="38" />
         <span class="nav-logo">水会</span>
       </a>
-      <ul class="nav-links">
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="打开导航菜单">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+      <ul class="nav-links" id="navMenu">
         <li><a href="#workshop">工作坊</a></li>
         <li><a href="#about">关于</a></li>
         <li><a href="#conditions">入会条件</a></li>
@@ -1599,9 +1773,10 @@
     </div>
   </footer>
 
-  <script src="config.js?v=4"></script>
-  <script src="db.js?v=5"></script>
-  <script src="bubbles.js?v=4"></script>
+  <script src="path.js"></script>
+  <script src="config.js?v=6"></script>
+  <script src="db.js?v=6"></script>
+  <script src="bubbles.js?v=6"></script>
   <script>
     var bubblesBg = document.getElementById('bubbles');
     var bubblesInteractive = document.getElementById('bubblesInteractive');
@@ -1733,8 +1908,34 @@
       });
     })();
 
+    // Mobile nav menu
+    (function () {
+      const toggle = document.getElementById('navToggle');
+      const menu = document.getElementById('navMenu');
+      if (!toggle || !menu) return;
+
+      function closeMenu() {
+        toggle.setAttribute('aria-expanded', 'false');
+        menu.classList.remove('open');
+      }
+
+      toggle.addEventListener('click', function () {
+        const open = menu.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+
+      menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeMenu();
+      });
+    })();
+
     // Form submit
-    document.getElementById('applyForm').addEventListener('submit', async (e) => {
+    var applyForm = document.getElementById('applyForm');
+    if (applyForm) applyForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submitBtn');
       const name = document.getElementById('name').value.trim();

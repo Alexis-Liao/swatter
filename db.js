@@ -162,7 +162,7 @@
   }
 
   window.ShuihuiDB = {
-    version: 4,
+    version: 6,
 
     isConfigured() {
       return getScriptUrl() !== null;

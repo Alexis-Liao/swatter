@@ -5,18 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="山寨水会会员池 — 已登记的水生生物名录" />
   <title>会员池 · 山寨水会</title>
-  <script>
-    (function () {
-      var base = './';
-      if (location.hostname.endsWith('github.io')) {
-        var repo = location.pathname.split('/').filter(Boolean)[0];
-        if (repo && repo.indexOf('.') === -1) base = '/' + repo + '/';
-      }
-      var el = document.createElement('base');
-      el.href = base;
-      document.head.appendChild(el);
-    })();
-  </script>
+  <script src="path.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
@@ -302,6 +291,46 @@
     }
 
     footer a { color: var(--aqua); text-decoration: none; }
+
+    @media (max-width: 768px) {
+      .container { padding: 2rem 1rem calc(3rem + env(safe-area-inset-bottom)); }
+
+      nav .inner {
+        padding: 0.75rem 1rem;
+        padding-top: max(0.75rem, env(safe-area-inset-top));
+      }
+
+      .nav-logo { font-size: 1.25rem; }
+
+      .mfa-logo-nav {
+        width: 30px !important;
+        height: 30px !important;
+      }
+
+      .nav-back { font-size: 0.8rem; }
+
+      .page-header { margin-bottom: 2rem; }
+
+      h1 { letter-spacing: 0.08em; font-size: clamp(1.75rem, 8vw, 2.4rem); }
+
+      .subtitle { font-size: 0.95rem; line-height: 1.8; }
+
+      .stats-bar { gap: 0.75rem; margin-bottom: 2rem; }
+
+      .stat {
+        flex: 1 1 calc(50% - 0.75rem);
+        min-width: 0;
+        padding: 0.85rem 0.75rem;
+      }
+
+      .stat-num { font-size: 1.65rem; }
+
+      .members-grid { grid-template-columns: 1fr; gap: 1rem; }
+
+      .member-card { padding: 1.15rem; }
+
+      footer { padding: 1.75rem 1rem calc(2rem + env(safe-area-inset-bottom)); }
+    }
   </style>
 </head>
 <body>
@@ -359,8 +388,9 @@
     </div>
   </footer>
 
-  <script src="config.js?v=4"></script>
-  <script src="db.js?v=5"></script>
+  <script src="path.js"></script>
+  <script src="config.js?v=6"></script>
+  <script src="db.js?v=6"></script>
   <script>
     const content = document.getElementById('content');
     const statsBar = document.getElementById('statsBar');
@@ -394,13 +424,23 @@
       `;
     }
 
-    function renderError(msg) {
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str == null ? '' : String(str);
+      return div.innerHTML;
+    }
+
+    function renderError(msg, showRetry) {
       content.innerHTML = `
         <div class="state-box">
           <h2>打捞失败</h2>
-          <p>${msg}</p>
+          <p>${escapeHtml(msg)}</p>
+          ${showRetry ? '<p><button type="button" id="retryMembers" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;padding:0;">点击重试</button></p>' : ''}
         </div>
       `;
+      if (showRetry) {
+        document.getElementById('retryMembers')?.addEventListener('click', load);
+      }
     }
 
     function renderMembers(list) {
@@ -427,12 +467,6 @@
       `).join('')}</div>`;
     }
 
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
-    }
-
     async function load() {
       if (!ShuihuiDB.isConfigured()) {
         renderNotConfigured();
@@ -443,8 +477,7 @@
         const list = await ShuihuiDB.listApplications();
         renderMembers(list);
       } catch (err) {
-        renderError(err.message || '无法读取会员数据，请检查网络后 <button type="button" id="retryMembers" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;">点击重试</button>');
-        document.getElementById('retryMembers')?.addEventListener('click', load);
+        renderError(err.message || '无法读取会员数据，请检查网络后重试', true);
       }
     }
 
