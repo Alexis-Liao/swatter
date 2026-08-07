@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="水生生物蕴涵 7月26日生日快乐 — 山寨水会非正式水庆仪式" />
   <title>水庆 · 蕴涵 7月26日生日快乐 · 山寨水会</title>
+  <script src="path.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
@@ -649,18 +650,69 @@
     footer a { color: var(--gold); text-decoration: none; }
     footer a:hover { color: var(--accent); }
 
-    @media (max-width: 600px) {
-      .celebration-hero { padding: 2.5rem 0 1.5rem; }
-      .cake { font-size: 4rem; }
-      .wish-form {
-        grid-template-columns: 1fr;
+    @media (max-width: 768px) {
+      nav .inner {
+        padding: 0.75rem 1rem;
+        padding-top: max(0.75rem, env(safe-area-inset-top));
       }
 
-      .wish-form button {
-        width: 100%;
+      .nav-logo { font-size: 1.25rem; }
+
+      .nav-back { font-size: 0.8rem; }
+
+      .container { padding: 0 1rem calc(3rem + env(safe-area-inset-bottom)); }
+
+      .celebration-hero { padding: 2.25rem 0 1.5rem; }
+
+      .celebration-badge {
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        padding: 0.35rem 0.85rem;
       }
+
+      .celebration-hero h1 { letter-spacing: 0.12em; }
+
+      .celebration-hero .name { letter-spacing: 0.15em; }
+
+      .celebration-hero .subtitle {
+        font-size: 0.9rem;
+        padding: 0 0.25rem;
+      }
+
+      .cake { font-size: 4rem; }
+
+      .cake-hint {
+        font-size: 0.85rem;
+        padding: 0 0.5rem;
+        line-height: 1.75;
+      }
+
+      .wish-form { grid-template-columns: 1fr; }
+
+      .wish-form button { width: 100%; }
 
       .wish-input-row { flex-direction: column; }
+
+      footer { padding: 1.75rem 1rem calc(2.5rem + env(safe-area-inset-bottom)); }
+    }
+
+    @media (max-width: 600px) {
+      body { cursor: default; }
+
+      .celebration-hero .name {
+        font-size: clamp(1.85rem, 10vw, 2.75rem);
+      }
+
+      .cake-section { padding: 1.5rem 0 2rem; }
+
+      .blessing-box { padding: 1rem 0.85rem; font-size: 0.95rem; }
+
+      .wish-tag { padding: 0.85rem 1rem; font-size: 0.92rem; }
+
+      .wish-form input,
+      .wish-input-row input {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
@@ -794,9 +846,10 @@
     </div>
   </div>
 
-  <script src="config.js?v=4"></script>
-  <script src="db.js?v=4"></script>
-  <script src="bubbles.js?v=4"></script>
+  <script src="path.js"></script>
+  <script src="config.js?v=6"></script>
+  <script src="db.js?v=6"></script>
+  <script src="bubbles.js?v=6"></script>
   <script>
     if (!window.ShuihuiDB || typeof ShuihuiDB.submitBirthdayWish !== 'function') {
       console.error('ShuihuiDB 未正确加载，请强制刷新页面（Ctrl+Shift+R 或 Cmd+Shift+R）');
