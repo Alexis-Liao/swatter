@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="水生生物蕴涵 7月26日生日快乐 — 山寨水会非正式水庆仪式" />
+  <title>水庆 · 蕴涵 7月26日生日快乐 · 山寨水会</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --deep: #0a1628;
+      --ocean: #0d2847;
+      --water: #1a4a6e;
+      --aqua: #3d8b9e;
+      --foam: #7ec8d4;
+      --text: #d4eaf0;
+      --text-muted: #8bb8c8;
+      --accent: #5ec4d4;
+      --accent-glow: rgba(94, 196, 212, 0.35);
+      --gold: #c9a962;
+      --gold-glow: rgba(201, 169, 98, 0.35);
+      --coral: #e8a598;
+      --font-serif: 'Noto Serif SC', 'Songti SC', serif;
+      --font-display: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
+      --page-width: min(1600px, 94vw);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text);
+      background: var(--deep);
+      overflow-x: hidden;
+      cursor: crosshair;
+    }
+
+    .water-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 30%, rgba(201, 169, 98, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(26, 74, 110, 0.6) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(61, 139, 158, 0.2) 0%, transparent 60%),
+        linear-gradient(180deg, #0f1a2e 0%, var(--ocean) 45%, #0f3050 100%);
+    }
+
+    .waves {
+      position: fixed;
+      bottom: 0; left: 0;
+      width: 100%; height: 180px;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .waves svg {
+      position: absolute;
+      bottom: 0;
+      width: 200%;
+      height: 100%;
+      animation: wave-drift 12s linear infinite;
+    }
+
+    .waves svg:nth-child(2) { animation-duration: 18s; animation-direction: reverse; opacity: 0.5; bottom: 10px; }
+    .waves svg:nth-child(3) { animation-duration: 24s; opacity: 0.3; bottom: 20px; }
+
+    @keyframes wave-drift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .bubbles-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ripple-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(94, 196, 212, 0.5);
+      transform: translate(-50%, -50%) scale(0);
+      animation: ripple-out 1.2s ease-out forwards;
+    }
+
+    @keyframes ripple-out {
+      to { transform: translate(-50%, -50%) scale(4); opacity: 0; }
+    }
+
+    .confetti-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .confetti {
+      position: absolute;
+      font-size: 1.2rem;
+      animation: confetti-fall linear forwards;
+    }
+
+    @keyframes confetti-fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(10, 22, 40, 0.75);
+      border-bottom: 1px solid rgba(201, 169, 98, 0.15);
+    }
+
+    nav .inner {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 0.85rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--foam);
+      text-decoration: none;
+      letter-spacing: 0.15em;
+    }
+
+    .nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--gold); }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 0 2rem 4rem;
+    }
+
+    /* Hero */
+    .celebration-hero {
+      text-align: center;
+      padding: 3.5rem 0 2.5rem;
+    }
+
+    .celebration-badge {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      border: 1px solid rgba(201, 169, 98, 0.5);
+      border-radius: 2rem;
+      color: var(--gold);
+      font-size: 0.78rem;
+      letter-spacing: 0.25em;
+      margin-bottom: 1.5rem;
+      background: rgba(201, 169, 98, 0.1);
+      animation: badge-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes badge-pulse {
+      0%, 100% { box-shadow: 0 0 0 rgba(201, 169, 98, 0); }
+      50% { box-shadow: 0 0 24px rgba(201, 169, 98, 0.25); }
+    }
+
+    .celebration-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 7vw, 3.2rem);
+      color: var(--foam);
+      letter-spacing: 0.2em;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 40px var(--gold-glow);
+    }
+
+    .celebration-hero .name {
+      font-size: clamp(2.2rem, 9vw, 3.8rem);
+      color: var(--gold);
+      letter-spacing: 0.25em;
+      margin: 0.5rem 0 1rem;
+      animation: name-glow 4s ease-in-out infinite;
+    }
+
+    @keyframes name-glow {
+      0%, 100% { text-shadow: 0 0 20px var(--gold-glow); }
+      50% { text-shadow: 0 0 50px rgba(201, 169, 98, 0.6), 0 0 80px var(--accent-glow); }
+    }
+
+    .celebration-hero .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 28em;
+      margin: 0 auto;
+      line-height: 1.9;
+    }
+
+    /* Cake section */
+    .cake-section {
+      text-align: center;
+      padding: 2rem 0 3rem;
+    }
+
+    .cake-stage {
+      position: relative;
+      display: inline-block;
+      margin: 1.5rem 0;
+      cursor: pointer;
+    }
+
+    .cake {
+      font-size: 5rem;
+      filter: drop-shadow(0 8px 24px rgba(94, 196, 212, 0.3));
+      transition: transform 0.3s;
+      user-select: none;
+    }
+
+    .cake-stage:hover .cake { transform: scale(1.05) rotate(-2deg); }
+
+    .candles {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+    }
+
+    .candle {
+      width: 8px;
+      height: 28px;
+      background: linear-gradient(180deg, var(--coral), #c4786a);
+      border-radius: 2px;
+      position: relative;
+      cursor: pointer;
+      transition: opacity 0.5s, transform 0.5s;
+    }
+
+    .candle.lit::after {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 14px;
+      background: radial-gradient(ellipse, #ffe4a0 0%, #ffb347 40%, transparent 70%);
+      border-radius: 50% 50% 50% 50%;
+      animation: flicker 0.8s ease-in-out infinite alternate;
+    }
+
+    .candle.out {
+      opacity: 0.3;
+      transform: scaleY(0.6);
+    }
+
+    .candle.out::after { display: none; }
+
+    @keyframes flicker {
+      0% { transform: translateX(-50%) scale(1) rotate(-3deg); opacity: 0.9; }
+      100% { transform: translateX(-50%) scale(1.15) rotate(3deg); opacity: 1; }
+    }
+
+    .cake-hint {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+    }
+
+    .cake-hint em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    /* Interactive panel */
+    .panel {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(126, 200, 212, 0.15);
+      border-radius: 14px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .panel-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      color: var(--aqua);
+      margin-bottom: 0.5rem;
+    }
+
+    .panel h2 {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      color: var(--foam);
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    .panel p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .action-btn {
+      padding: 0.85rem 1rem;
+      background: rgba(94, 196, 212, 0.08);
+      border: 1px solid rgba(94, 196, 212, 0.25);
+      border-radius: 10px;
+      color: var(--foam);
+      font-family: var(--font-serif);
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.25s;
+      letter-spacing: 0.05em;
+    }
+
+    .action-btn:hover {
+      background: rgba(94, 196, 212, 0.18);
+      border-color: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+      transform: translateY(-2px);
+    }
+
+    .action-btn.gold {
+      background: rgba(201, 169, 98, 0.1);
+      border-color: rgba(201, 169, 98, 0.35);
+    }
+
+    .action-btn.gold:hover {
+      background: rgba(201, 169, 98, 0.2);
+      box-shadow: 0 0 20px var(--gold-glow);
+    }
+
+    /* Blessing display */
+    .blessing-box {
+      min-height: 4.5rem;
+      padding: 1.25rem;
+      background: rgba(201, 169, 98, 0.06);
+      border: 1px dashed rgba(201, 169, 98, 0.3);
+      border-radius: 10px;
+      text-align: center;
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.8;
+      transition: opacity 0.4s;
+    }
+
+    .blessing-box.empty {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .blessing-box.fade { opacity: 0; }
+
+    .wish-hint {
+      font-size: 0.88rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      padding: 0.65rem 0.9rem;
+      background: rgba(201, 169, 98, 0.08);
+      border-left: 2px solid rgba(201, 169, 98, 0.4);
+      border-radius: 0 8px 8px 0;
+      line-height: 1.7;
+    }
+
+    .wish-form {
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 0.65rem;
+      margin-bottom: 1rem;
+    }
+
+    .wish-form label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.05em;
+    }
+
+    .wish-form input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(126, 200, 212, 0.2);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-serif);
+      font-size: 0.92rem;
+    }
+
+    .wish-form input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .wish-form button {
+      align-self: end;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, var(--aqua), var(--water));
+      border: none;
+      border-radius: 8px;
+      color: var(--foam);
+      font-family: var(--font-display);
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.08em;
+    }
+
+    /* Wish wall */
+    .wish-input-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .wish-input-row input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(126, 200, 212, 0.2);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font-serif);
+      font-size: 0.92rem;
+    }
+
+    .wish-input-row input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .wish-input-row button {
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, var(--aqua), var(--water));
+      border: none;
+      border-radius: 8px;
+      color: var(--foam);
+      font-family: var(--font-display);
+      cursor: pointer;
+      white-space: nowrap;
+      letter-spacing: 0.08em;
+    }
+
+    .wish-wall {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      min-height: 3rem;
+    }
+
+    .wish-tag {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 0.15rem;
+      padding: 0.5rem 0.9rem;
+      background: rgba(94, 196, 212, 0.12);
+      border: 1px solid rgba(94, 196, 212, 0.2);
+      border-radius: 10px;
+      font-size: 0.82rem;
+      color: var(--text);
+      animation: tag-pop 0.4s ease-out;
+      max-width: 100%;
+    }
+
+    .wish-author {
+      font-size: 0.72rem;
+      color: var(--gold);
+      letter-spacing: 0.06em;
+    }
+
+    .wish-text {
+      line-height: 1.5;
+    }
+
+    .recent-blessings {
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .recent-blessing-item {
+      padding: 0.85rem 1rem;
+      background: rgba(201, 169, 98, 0.06);
+      border-left: 2px solid rgba(201, 169, 98, 0.35);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .recent-blessing-item time {
+      display: block;
+      font-size: 0.72rem;
+      color: rgba(139, 184, 200, 0.55);
+      margin-top: 0.35rem;
+    }
+
+    .recent-empty {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .wish-wall-empty {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    #wishSubmit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @keyframes tag-pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      70% { transform: scale(1.08); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Counter */
+    .joy-meter {
+      text-align: center;
+      padding: 1.5rem;
+    }
+
+    .joy-count {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      line-height: 1;
+    }
+
+    .joy-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+
+    /* Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Victory overlay */
+    .victory-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(10, 22, 40, 0.85);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s;
+    }
+
+    .victory-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .victory-card {
+      text-align: center;
+      padding: 2.5rem;
+      max-width: 22em;
+    }
+
+    .victory-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+
+    .victory-card p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.9;
+    }
+
+    .victory-card button {
+      padding: 0.75rem 2rem;
+      background: transparent;
+      border: 1px solid var(--gold);
+      border-radius: 2rem;
+      color: var(--gold);
+      font-family: var(--font-display);
+      cursor: pointer;
+      letter-spacing: 0.1em;
+    }
+
+    .victory-card button:hover {
+      background: rgba(201, 169, 98, 0.15);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 1.5rem 3rem;
+      border-top: 1px solid rgba(201, 169, 98, 0.12);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a { color: var(--gold); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .celebration-hero { padding: 2.5rem 0 1.5rem; }
+      .cake { font-size: 4rem; }
+      .wish-form {
+        grid-template-columns: 1fr;
+      }
+
+      .wish-form button {
+        width: 100%;
+      }
+
+      .wish-input-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="water-bg" aria-hidden="true"></div>
+
+  <div class="waves" aria-hidden="true">
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,60 C150,120 350,0 600,60 C850,120 1050,0 1200,60 L1200,120 L0,120 Z" fill="rgba(26,74,110,0.4)"/>
+    </svg>
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,80 C200,20 400,100 600,50 C800,0 1000,80 1200,40 L1200,120 L0,120 Z" fill="rgba(61,139,158,0.25)"/>
+    </svg>
+    <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M0,90 C300,30 500,100 800,60 C950,40 1100,90 1200,70 L1200,120 L0,120 Z" fill="rgba(94,196,212,0.12)"/>
+    </svg>
+  </div>
+
+  <div class="bubbles-layer" id="bubblesLayer"></div>
+  <div class="bubbles-interactive" id="bubblesInteractive" aria-hidden="true"></div>
+  <div class="ripple-layer" id="rippleLayer"></div>
+  <div class="confetti-layer" id="confettiLayer"></div>
+
+  <nav>
+    <div class="inner">
+      <a href="index.html" class="nav-logo">水会</a>
+      <a href="index.html" class="nav-back">← 返回主站</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <header class="celebration-hero reveal visible">
+      <div class="celebration-badge">非正式水庆仪式 · 7月26日 · 2026</div>
+      <h1>生日快乐</h1>
+      <p class="name">蕴涵</p>
+      <p class="subtitle">
+        7月26日，全体水生生物谨以此页，庆祝蕴涵完成又一轮潮汐周期。<br />
+        愿你在浑水中继续漂浮，在沉淀物里打捞惊喜，永不被陆地完全定义。
+      </p>
+    </header>
+
+    <!-- Cake -->
+    <section class="cake-section reveal">
+      <div class="cake-stage" id="cakeStage" title="点击吹灭蜡烛">
+        <div class="candles" id="candles">
+          <div class="candle lit" data-i="0"></div>
+          <div class="candle lit" data-i="1"></div>
+          <div class="candle lit" data-i="2"></div>
+          <div class="candle lit" data-i="3"></div>
+          <div class="candle lit" data-i="4"></div>
+        </div>
+        <div class="cake">🎂</div>
+      </div>
+      <p class="cake-hint">点击蜡烛<em>吹灭</em>，或点击蛋糕<em>一键全灭</em> — 然后许一个水下的愿</p>
+    </section>
+
+    <!-- Joy meter -->
+    <div class="panel joy-meter reveal">
+      <div class="joy-count" id="joyCount">0</div>
+      <div class="joy-label">已累积的水庆能量（次）</div>
+    </div>
+
+    <!-- Actions -->
+    <section class="panel reveal">
+      <p class="panel-label">Interact</p>
+      <h2>水庆互动</h2>
+      <p>选择以下仪式，向蕴涵传递你的水文祝福。点击页面任意处亦可制造涟漪。</p>
+      <div class="action-grid">
+        <button class="action-btn gold" data-action="bless">抽取水文祝词</button>
+        <button class="action-btn" data-action="bubbles">释放庆祝气泡</button>
+        <button class="action-btn" data-action="confetti">投掷水中礼花</button>
+        <button class="action-btn" data-action="splash">泼洒祝福水花</button>
+        <button class="action-btn gold" data-action="song">哼唱非正式水歌</button>
+        <button class="action-btn" data-action="gift">呈上虚拟水礼物</button>
+      </div>
+    </section>
+
+    <!-- Blessing -->
+    <section class="panel reveal">
+      <p class="panel-label">Blessing</p>
+      <h2>水文祝词</h2>
+      <div class="blessing-box empty" id="blessingBox">
+        点击「抽取水文祝词」，获取一条来自水底的无用真理
+      </div>
+    </section>
+
+    <!-- Recent blessings -->
+    <section class="panel reveal">
+      <p class="panel-label">Recent</p>
+      <h2>最近的祝词</h2>
+      <div class="recent-blessings" id="recentBlessings">
+        <p class="recent-empty">尚无记录，成为第一个抽取祝词的人</p>
+      </div>
+    </section>
+
+    <!-- Wish wall -->
+    <section class="panel reveal">
+      <p class="panel-label">Wishes</p>
+      <h2>祝福墙</h2>
+      <p>写下你想对蕴涵说的水下低语，它将漂浮在祝福墙中，与其他气泡共存。</p>
+      <p class="wish-hint">请留下你在水中的名字，让蕴涵知道这条祝福来自哪位水生生物。</p>
+      <div class="wish-form">
+        <div>
+          <label for="wishName">祝福人 · 水生名称</label>
+          <input type="text" id="wishName" placeholder="例：未脱水的小鱼" maxlength="30" required />
+        </div>
+        <div>
+          <label for="wishInput">祝福内容</label>
+          <input type="text" id="wishInput" placeholder="例：愿你永远保有未脱水的那一部分..." maxlength="60" required />
+        </div>
+        <button type="button" id="wishSubmit">放入水中</button>
+      </div>
+      <div class="wish-wall" id="wishWall"></div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>山寨水会 · 非正式水庆委员会</p>
+    <p style="margin-top:0.5rem;"><a href="index.html">返回水会主页</a></p>
+  </footer>
+
+  <!-- Victory overlay -->
+  <div class="victory-overlay" id="victoryOverlay">
+    <div class="victory-card">
+      <h2>愿望已接收</h2>
+      <p>五支蜡烛全部熄灭。你的愿望已随气泡上浮，漂向蕴涵所在的水域。山寨水会记录：这是一次成功的水庆仪式。</p>
+      <button type="button" id="victoryClose">继续庆祝</button>
+    </div>
+  </div>
+
+  <script src="config.js?v=4"></script>
+  <script src="db.js?v=4"></script>
+  <script src="bubbles.js?v=4"></script>
+  <script>
+    if (!window.ShuihuiDB || typeof ShuihuiDB.submitBirthdayWish !== 'function') {
+      console.error('ShuihuiDB 未正确加载，请强制刷新页面（Ctrl+Shift+R 或 Cmd+Shift+R）');
+    }
+    const blessings = [
+      '愿你的每一岁都像涨潮一样，带来意料之外的淹没与滋润。',
+      '愿你在陆地与水体之间，永远保留那道尚未愈合的湿润边界。',
+      '愿你的打捞员本能永不退化，总能从浑水中捞出荒诞的珍宝。',
+      '愿烂天使、山寨家庭与纯爱诊所的记忆，在你腮边轻轻振动。',
+      '愿你延迟的一切正式事物，都为更流动的生活让出位置。',
+      '愿你的单位之名，只是水底一瞬的集群，而非永久的容器。',
+      '愿你在下沉与漂浮之间，找到只属于自己的水文节奏。',
+      '愿今日之后，仍有人在你耳边低语：成为水生生物吧。',
+      '愿你的水实验永远失败得有趣，成功得可疑。',
+      '愿蕴涵二字，在所有语言中都可被读作一种动词。',
+    ];
+
+    const gifts = ['🫧 一罐压缩海水', '🐚 半片匿名贝壳', '📜 湿透的无用脚注', '🪸 临时造礁许可', '💧 延迟发表的祝福', '🌊 非正式涨潮券'];
+    const songs = [
+      '～～～ 涨潮涨潮，不要上岸 ～～～',
+      '～～～ 蕴涵蕴涵，继续漂浮 ～～～',
+      '～～～ 陆地干货，全部冲走 ～～～',
+    ];
+
+    let joyCount = 0;
+    const joyEl = document.getElementById('joyCount');
+    const blessingBox = document.getElementById('blessingBox');
+    const wishWall = document.getElementById('wishWall');
+    const recentBlessingsEl = document.getElementById('recentBlessings');
+    const candles = document.querySelectorAll('.candle');
+    let blownCount = 0;
+
+    function formatDate(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return d.toLocaleDateString('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    }
+
+    function setJoyCount(n) {
+      joyCount = n;
+      joyEl.textContent = joyCount;
+    }
+
+    function bumpJoy(n = 1) {
+      joyCount += n;
+      joyEl.textContent = joyCount;
+      joyEl.style.transform = 'scale(1.15)';
+      setTimeout(() => { joyEl.style.transform = 'scale(1)'; }, 200);
+    }
+
+    async function recordInteraction(action, detail) {
+      bumpJoy(1);
+      if (!ShuihuiDB.isConfigured()) return;
+      try {
+        await ShuihuiDB.logBirthdayInteraction(action, detail);
+      } catch (err) {
+        console.warn('互动记录失败', err);
+      }
+    }
+
+    function spawnBubble(x, y, count = 1) {
+      BubbleFX.spawn(
+        document.getElementById('bubblesLayer'),
+        x,
+        y,
+        count,
+        document.getElementById('bubblesInteractive')
+      );
+    }
+
+    function spawnRipple(x, y) {
+      const layer = document.getElementById('rippleLayer');
+      const r = document.createElement('div');
+      r.className = 'ripple';
+      r.style.left = x + 'px';
+      r.style.top = y + 'px';
+      r.style.width = r.style.height = '40px';
+      layer.appendChild(r);
+      setTimeout(() => r.remove(), 1200);
+    }
+
+    function spawnConfetti() {
+      const layer = document.getElementById('confettiLayer');
+      const icons = ['🫧', '✨', '🐟', '🌊', '💧', '🪼', '⭐', '🎈'];
+      for (let i = 0; i < 24; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.textContent = icons[Math.floor(Math.random() * icons.length)];
+        c.style.left = Math.random() * 100 + '%';
+        c.style.top = '-30px';
+        c.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        c.style.animationDelay = Math.random() * 0.5 + 's';
+        layer.appendChild(c);
+        setTimeout(() => c.remove(), 6000);
+      }
+    }
+
+    function showBlessing() {
+      const text = blessings[Math.floor(Math.random() * blessings.length)];
+      blessingBox.classList.add('fade');
+      setTimeout(() => {
+        blessingBox.classList.remove('empty', 'fade');
+        blessingBox.textContent = text;
+      }, 200);
+      recordInteraction('bless', text);
+      prependRecentBlessing({ text, created_at: new Date().toISOString() });
+    }
+
+    function prependRecentBlessing(item) {
+      const empty = recentBlessingsEl.querySelector('.recent-empty');
+      if (empty) empty.remove();
+
+      const el = document.createElement('div');
+      el.className = 'recent-blessing-item';
+      el.innerHTML = `${escapeHtml(item.text)}<time>${formatDate(item.created_at)}</time>`;
+      recentBlessingsEl.prepend(el);
+
+      while (recentBlessingsEl.children.length > 8) {
+        recentBlessingsEl.lastElementChild.remove();
+      }
+    }
+
+    function renderRecentBlessings(list) {
+      if (!list.length) return;
+      recentBlessingsEl.innerHTML = list.map((item) => `
+        <div class="recent-blessing-item">
+          ${escapeHtml(item.text)}
+          <time>${formatDate(item.created_at)}</time>
+        </div>
+      `).join('');
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function blowCandle(candle) {
+      if (candle.classList.contains('out')) return;
+      candle.classList.add('out');
+      blownCount++;
+      spawnBubble(null, null, 3);
+      recordInteraction('candle');
+      if (blownCount >= candles.length) {
+        recordInteraction('candles_complete', '五支蜡烛全部熄灭');
+        setTimeout(() => {
+          document.getElementById('victoryOverlay').classList.add('show');
+          spawnConfetti();
+          spawnBubble(null, null, 15);
+        }, 600);
+      }
+    }
+
+    // Candles
+    candles.forEach((c) => {
+      c.addEventListener('click', (e) => {
+        e.stopPropagation();
+        blowCandle(c);
+      });
+    });
+
+    document.getElementById('cakeStage').addEventListener('click', () => {
+      candles.forEach((c) => blowCandle(c));
+    });
+
+    document.getElementById('victoryClose').addEventListener('click', () => {
+      document.getElementById('victoryOverlay').classList.remove('show');
+    });
+
+    // Action buttons
+    document.querySelectorAll('[data-action]').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const action = btn.dataset.action;
+        switch (action) {
+          case 'bless':
+            showBlessing();
+            break;
+          case 'bubbles':
+            await recordInteraction('bubbles');
+            spawnBubble(null, null, 12);
+            break;
+          case 'confetti':
+            await recordInteraction('confetti');
+            spawnConfetti();
+            break;
+          case 'splash':
+            await recordInteraction('splash');
+            for (let i = 0; i < 8; i++) {
+              setTimeout(() => spawnRipple(Math.random() * window.innerWidth, Math.random() * window.innerHeight), i * 80);
+            }
+            spawnBubble(null, null, 8);
+            break;
+          case 'song': {
+            const song = songs[Math.floor(Math.random() * songs.length)];
+            alert('🎵 ' + song);
+            await recordInteraction('song', song);
+            break;
+          }
+          case 'gift': {
+            const gift = gifts[Math.floor(Math.random() * gifts.length)];
+            alert('🎁 你向蕴涵呈上了：' + gift);
+            await recordInteraction('gift', gift);
+            spawnBubble(null, null, 5);
+            break;
+          }
+        }
+      });
+    });
+
+    // Click ripples
+    document.body.addEventListener('click', (e) => {
+      if (e.target.closest('button, input, a, .candle, .victory-overlay')) return;
+      spawnRipple(e.clientX, e.clientY);
+      if (Math.random() > 0.6) spawnBubble(e.clientX, e.clientY, 1);
+    });
+
+    // Wish wall
+    function buildWishTagHtml(wish) {
+      const text = escapeHtml(wish.text || wish);
+      const author = wish.author ? escapeHtml(wish.author) : '';
+      if (author) {
+        return `<span class="wish-tag"><span class="wish-author">${author}</span><span class="wish-text">${text}</span></span>`;
+      }
+      return `<span class="wish-tag"><span class="wish-text">${text}</span></span>`;
+    }
+
+    function addWishTag(wish) {
+      const empty = wishWall.querySelector('.wish-wall-empty');
+      if (empty) empty.remove();
+
+      const wrapper = document.createElement('div');
+      wrapper.innerHTML = buildWishTagHtml(wish);
+      wishWall.prepend(wrapper.firstElementChild);
+      spawnBubble(null, null, 2);
+    }
+
+    function renderWishes(wishes) {
+      if (!wishes.length) {
+        wishWall.innerHTML = '<span class="wish-wall-empty">祝福墙尚空，写下第一条水下低语吧</span>';
+        return;
+      }
+      wishWall.innerHTML = wishes.map((w) => buildWishTagHtml(w)).join('');
+    }
+
+    function readFieldValue(el) {
+      if (document.activeElement === el) el.blur();
+      return el.value.trim();
+    }
+
+    document.getElementById('wishSubmit').addEventListener('click', async () => {
+      const nameInput = document.getElementById('wishName');
+      const input = document.getElementById('wishInput');
+      const btn = document.getElementById('wishSubmit');
+
+      await sleep(50);
+      const author = readFieldValue(nameInput);
+      const val = readFieldValue(input);
+
+      if (!author) {
+        alert('请留下你的水生名称，再发送祝福');
+        nameInput.focus();
+        return;
+      }
+      if (!val) {
+        input.focus();
+        return;
+      }
+
+      btn.disabled = true;
+
+      try {
+        if (!window.ShuihuiDB || typeof ShuihuiDB.submitBirthdayWish !== 'function') {
+          throw new Error('数据库模块未加载，请强制刷新页面后重试');
+        }
+        if (ShuihuiDB.isConfigured()) {
+          await ShuihuiDB.submitBirthdayWish(val, author);
+          await recordInteraction('wish', author + '：' + val);
+        } else {
+          bumpJoy(1);
+        }
+        addWishTag({ author: author, text: val });
+        nameInput.value = '';
+        input.value = '';
+      } catch (err) {
+        alert('祝福发送失败：' + (err.message || '请稍后重试'));
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    document.getElementById('wishInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('wishSubmit').click();
+    });
+
+    document.getElementById('wishName').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') document.getElementById('wishInput').focus();
+    });
+
+    function sleep(ms) {
+      return new Promise(function (resolve) { setTimeout(resolve, ms); });
+    }
+
+    async function loadBirthdayData() {
+      if (!ShuihuiDB.isConfigured()) return;
+
+      const joyEl = document.getElementById('joyCount');
+      const prevJoy = joyEl.textContent;
+
+      try {
+        joyEl.textContent = '…';
+        const data = await ShuihuiDB.getBirthdayData();
+        setJoyCount(data.totalJoy || 0);
+        renderWishes(data.wishes || []);
+        renderRecentBlessings(data.recentBlessings || []);
+      } catch (err) {
+        joyEl.textContent = prevJoy;
+        console.warn('加载生日数据失败', err);
+        if (!wishWall.querySelector('.wish-tag')) {
+          wishWall.innerHTML = '<span class="wish-wall-empty">加载失败，<button type="button" id="retryLoad" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;">点击重试</button></span>';
+          document.getElementById('retryLoad').addEventListener('click', loadBirthdayData);
+        }
+      }
+    }
+
+    loadBirthdayData();
+
+    // Ambient bubbles
+    setInterval(() => spawnBubble(null, null, 1), 2000);
+
+    // Reveal — also force-show elements already in viewport
+    function revealInView() {
+      document.querySelectorAll('.reveal:not(.visible)').forEach(function (el) {
+        var rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+          el.classList.add('visible');
+        }
+      });
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+      { threshold: 0.06, rootMargin: '0px 0px -20px 0px' }
+    );
+    document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+    revealInView();
+    window.addEventListener('pageshow', function (e) {
+      if (e.persisted) revealInView();
+    });
+
+    // Joy count transition
+    joyEl.style.transition = 'transform 0.2s';
+  </script>
+</body>
+</html>

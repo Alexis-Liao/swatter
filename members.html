@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="山寨水会会员池 — 已登记的水生生物名录" />
+  <title>会员池 · 山寨水会</title>
+  <script>
+    (function () {
+      var base = './';
+      if (location.hostname.endsWith('github.io')) {
+        var repo = location.pathname.split('/').filter(Boolean)[0];
+        if (repo && repo.indexOf('.') === -1) base = '/' + repo + '/';
+      }
+      var el = document.createElement('base');
+      el.href = base;
+      document.head.appendChild(el);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --deep: #0a1628;
+      --ocean: #0d2847;
+      --water: #1a4a6e;
+      --aqua: #3d8b9e;
+      --foam: #7ec8d4;
+      --text: #d4eaf0;
+      --text-muted: #8bb8c8;
+      --accent: #5ec4d4;
+      --accent-glow: rgba(94, 196, 212, 0.35);
+      --gold: #c9a962;
+      --surface: rgba(255, 255, 255, 0.06);
+      --font-serif: 'Noto Serif SC', 'Songti SC', serif;
+      --font-display: 'ZCOOL XiaoWei', 'Noto Serif SC', serif;
+      --page-width: min(1600px, 94vw);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text);
+      background: var(--deep);
+      min-height: 100vh;
+    }
+
+    .water-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 100%, rgba(26, 74, 110, 0.6) 0%, transparent 70%),
+        linear-gradient(180deg, var(--deep) 0%, var(--ocean) 45%, #0f3050 100%);
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      background: rgba(10, 22, 40, 0.75);
+      border-bottom: 1px solid rgba(126, 200, 212, 0.12);
+    }
+
+    nav .inner {
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 0.85rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--foam);
+      letter-spacing: 0.15em;
+    }
+
+    .mfa-logo {
+      display: block;
+      border-radius: 50%;
+      filter: drop-shadow(0 0 8px rgba(94, 196, 212, 0.35));
+      opacity: 0.92;
+    }
+
+    .mfa-logo-nav { width: 34px; height: 34px; }
+
+    .footer-sponsor {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(126, 200, 212, 0.1);
+    }
+
+    .footer-sponsor p {
+      margin: 0.5rem 0 0;
+      font-size: 0.75rem;
+      opacity: 0.7;
+      letter-spacing: 0.1em;
+    }
+
+    .mfa-logo-footer { width: 56px; height: 56px; margin: 0 auto; }
+
+    .nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+    }
+
+    .nav-back:hover { color: var(--accent); }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.25em;
+      color: var(--aqua);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      color: var(--foam);
+      letter-spacing: 0.15em;
+      margin-bottom: 0.75rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      max-width: 36em;
+      margin: 0 auto;
+    }
+
+    .stats-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat {
+      text-align: center;
+      padding: 1rem 1.75rem;
+      background: var(--surface);
+      border: 1px solid rgba(126, 200, 212, 0.15);
+      border-radius: 12px;
+      min-width: 120px;
+    }
+
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .member-card {
+      background: var(--surface);
+      border: 1px solid rgba(126, 200, 212, 0.12);
+      border-radius: 14px;
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
+      animation: card-in 0.5s ease-out both;
+    }
+
+    .member-card:hover {
+      border-color: rgba(126, 200, 212, 0.28);
+      transform: translateY(-3px);
+    }
+
+    @keyframes card-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .member-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      color: var(--foam);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .member-type {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 2rem;
+      margin-bottom: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+
+    .member-type.stirrer,
+    .member-type.regular {
+      background: rgba(94, 196, 212, 0.12);
+      color: var(--accent);
+      border: 1px solid rgba(94, 196, 212, 0.25);
+    }
+
+    .member-type.floater,
+    .member-type.student {
+      background: rgba(201, 169, 98, 0.1);
+      color: var(--gold);
+      border: 1px solid rgba(201, 169, 98, 0.25);
+    }
+
+    .member-reason {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      border-left: 2px solid rgba(94, 196, 212, 0.25);
+      padding-left: 0.85rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .member-date {
+      font-size: 0.78rem;
+      color: rgba(139, 184, 200, 0.6);
+    }
+
+    .state-box {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: var(--surface);
+      border: 1px dashed rgba(126, 200, 212, 0.2);
+      border-radius: 14px;
+      color: var(--text-muted);
+    }
+
+    .state-box h2 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--foam);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    .state-box a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .state-box a:hover { text-decoration: underline; }
+
+    .loading-dots::after {
+      content: '';
+      animation: dots 1.2s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+      0% { content: ''; }
+      25% { content: '.'; }
+      50% { content: '..'; }
+      75% { content: '...'; }
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid rgba(126, 200, 212, 0.08);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    footer a { color: var(--aqua); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="water-bg" aria-hidden="true"></div>
+
+  <nav>
+    <div class="inner">
+      <a href="index.html" class="nav-brand">
+        <img src="assets/shanzhai-mfa-logo.png?v=2" alt="山寨 MFA" class="mfa-logo mfa-logo-nav" width="34" height="34" />
+        <span class="nav-logo">水会</span>
+      </a>
+      <a href="index.html#apply" class="nav-back">← 申请入会</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <header class="page-header">
+      <p class="section-label">Registry</p>
+      <h1>会员池</h1>
+      <p class="subtitle">
+        此处漂浮着所有已登记的水生生物。他们离开陆地，递交入水宣言，等待下一次涨潮的回应。<br />
+        （联系方式不在此公开展示，仅作水文信号留存。）
+      </p>
+    </header>
+
+    <div class="stats-bar" id="statsBar" hidden>
+      <div class="stat">
+        <div class="stat-num" id="totalCount">0</div>
+        <div class="stat-label">已登记总数</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="stirrerCount">0</div>
+        <div class="stat-label">搅水员</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" id="floaterCount">0</div>
+        <div class="stat-label">划水员</div>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="state-box">
+        <h2 class="loading-dots">正在从水底打捞会员记录</h2>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>山寨水会 · 会员池</p>
+    <p style="margin-top:0.5rem;"><a href="index.html">返回主页</a></p>
+    <div class="footer-sponsor">
+      <img src="assets/shanzhai-mfa-logo.png?v=2" alt="山寨 MFA" class="mfa-logo mfa-logo-footer" width="56" height="56" />
+      <p>非正式业务主管单位 · 山寨 MFA</p>
+    </div>
+  </footer>
+
+  <script src="config.js?v=4"></script>
+  <script src="db.js?v=5"></script>
+  <script>
+    const content = document.getElementById('content');
+    const statsBar = document.getElementById('statsBar');
+
+    function formatDate(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
+
+    function renderEmpty() {
+      content.innerHTML = `
+        <div class="state-box">
+          <h2>池中尚无水生生物</h2>
+          <p>还没有人递交入水申请。成为第一个潜入者 → <a href="index.html#apply">申请入会</a></p>
+        </div>
+      `;
+    }
+
+    function renderNotConfigured() {
+      content.innerHTML = `
+        <div class="state-box">
+          <h2>Google 表格尚未接通</h2>
+          <p>请按 <code>google-apps-script.gs</code> 部署 Web 应用，并将 URL 填入 <code>config.js</code> 的 <code>googleScriptUrl</code>。</p>
+        </div>
+      `;
+    }
+
+    function renderError(msg) {
+      content.innerHTML = `
+        <div class="state-box">
+          <h2>打捞失败</h2>
+          <p>${msg}</p>
+        </div>
+      `;
+    }
+
+    function renderMembers(list) {
+      if (!list.length) {
+        renderEmpty();
+        return;
+      }
+
+      const stirrer = list.filter((m) => m.member_type === 'stirrer' || m.member_type === 'regular').length;
+      const floater = list.filter((m) => m.member_type === 'floater' || m.member_type === 'student').length;
+
+      document.getElementById('totalCount').textContent = list.length;
+      document.getElementById('stirrerCount').textContent = stirrer;
+      document.getElementById('floaterCount').textContent = floater;
+      statsBar.hidden = false;
+
+      content.innerHTML = `<div class="members-grid">${list.map((m, i) => `
+        <article class="member-card" style="animation-delay:${Math.min(i * 0.05, 0.8)}s">
+          <div class="member-name">${escapeHtml(m.name)}</div>
+          <span class="member-type ${m.member_type}">${escapeHtml(ShuihuiDB.getTypeLabel(m.member_type))}</span>
+          ${m.reason ? `<p class="member-reason">${escapeHtml(m.reason)}</p>` : ''}
+          <div class="member-date">入水时间 · ${formatDate(m.created_at)}</div>
+        </article>
+      `).join('')}</div>`;
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    async function load() {
+      if (!ShuihuiDB.isConfigured()) {
+        renderNotConfigured();
+        return;
+      }
+
+      try {
+        const list = await ShuihuiDB.listApplications();
+        renderMembers(list);
+      } catch (err) {
+        renderError(err.message || '无法读取会员数据，请检查网络后 <button type="button" id="retryMembers" style="background:none;border:none;color:var(--accent);cursor:pointer;font:inherit;">点击重试</button>');
+        document.getElementById('retryMembers')?.addEventListener('click', load);
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>
