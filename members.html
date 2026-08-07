@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="山寨水会会员池 — 已登记的水生生物名录" />
   <title>会员池 · 山寨水会</title>
+  <script>
+    (function () {
+      var base = './';
+      if (location.hostname.endsWith('github.io')) {
+        var repo = location.pathname.split('/').filter(Boolean)[0];
+        if (repo && repo.indexOf('.') === -1) base = '/' + repo + '/';
+      }
+      var el = document.createElement('base');
+      el.href = base;
+      document.head.appendChild(el);
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
@@ -81,14 +93,8 @@
     .mfa-logo {
       display: block;
       border-radius: 50%;
-      filter:
-        invert(1)
-        sepia(0.42)
-        saturate(2)
-        hue-rotate(152deg)
-        brightness(1.06)
-        drop-shadow(0 0 8px rgba(94, 196, 212, 0.22));
-      opacity: 0.9;
+      filter: drop-shadow(0 0 8px rgba(94, 196, 212, 0.35));
+      opacity: 0.92;
     }
 
     .mfa-logo-nav { width: 34px; height: 34px; }
@@ -305,7 +311,7 @@
   <nav>
     <div class="inner">
       <a href="index.html" class="nav-brand">
-        <img src="assets/shanzhai-mfa-logo.png" alt="山寨 MFA" class="mfa-logo mfa-logo-nav" width="34" height="34" />
+        <img src="assets/shanzhai-mfa-logo.png?v=2" alt="山寨 MFA" class="mfa-logo mfa-logo-nav" width="34" height="34" />
         <span class="nav-logo">水会</span>
       </a>
       <a href="index.html#apply" class="nav-back">← 申请入会</a>
@@ -348,7 +354,7 @@
     <p>山寨水会 · 会员池</p>
     <p style="margin-top:0.5rem;"><a href="index.html">返回主页</a></p>
     <div class="footer-sponsor">
-      <img src="assets/shanzhai-mfa-logo.png" alt="山寨 MFA" class="mfa-logo mfa-logo-footer" width="56" height="56" />
+      <img src="assets/shanzhai-mfa-logo.png?v=2" alt="山寨 MFA" class="mfa-logo mfa-logo-footer" width="56" height="56" />
       <p>非正式业务主管单位 · 山寨 MFA</p>
     </div>
   </footer>

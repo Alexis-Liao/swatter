@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="山寨水会第三十一届会员招募 · 2026凡学术年会「水会研究方法与应用」工作坊 — 推动水文研究的非学术性水生研究组织" />
   <title>水会 · 山寨水会 Shanzhai Association of Water</title>
+  <script>
+    (function () {
+      var base = './';
+      if (location.hostname.endsWith('github.io')) {
+        var repo = location.pathname.split('/').filter(Boolean)[0];
+        if (repo && repo.indexOf('.') === -1) base = '/' + repo + '/';
+      }
+      var el = document.createElement('base');
+      el.href = base;
+      document.head.appendChild(el);
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
@@ -157,13 +169,7 @@
 
     .nav-brand:hover .mfa-logo {
       opacity: 1;
-      filter:
-        invert(1)
-        sepia(0.5)
-        saturate(2.4)
-        hue-rotate(152deg)
-        brightness(1.15)
-        drop-shadow(0 0 14px rgba(94, 196, 212, 0.45));
+      filter: drop-shadow(0 0 14px rgba(94, 196, 212, 0.55));
     }
 
     .nav-logo {
@@ -180,14 +186,8 @@
       object-fit: contain;
       border-radius: 50%;
       flex-shrink: 0;
-      filter:
-        invert(1)
-        sepia(0.42)
-        saturate(2)
-        hue-rotate(152deg)
-        brightness(1.06)
-        drop-shadow(0 0 8px rgba(94, 196, 212, 0.22));
-      opacity: 0.9;
+      filter: drop-shadow(0 0 8px rgba(94, 196, 212, 0.35));
+      opacity: 0.92;
       transition: filter 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
     }
 
@@ -204,23 +204,17 @@
 
     .mfa-logo-stamp {
       position: absolute;
-      top: 0.75rem;
-      right: 0.85rem;
+      top: 1.25rem;
+      right: 1.35rem;
       width: 82px;
       height: 82px;
       opacity: 0.32;
       transform: rotate(7deg);
       pointer-events: none;
-      filter:
-        invert(1)
-        sepia(0.35)
-        saturate(1.6)
-        hue-rotate(148deg)
-        brightness(1)
-        drop-shadow(0 0 6px rgba(94, 196, 212, 0.12));
+      filter: drop-shadow(0 0 6px rgba(94, 196, 212, 0.12));
     }
 
-    .scape-about { grid-column: 1 / 8; --tilt: -0.7deg; margin-top: 1rem; position: relative; overflow: visible; }
+    .scape-about { grid-column: 1 / 9; --tilt: -0.7deg; margin-top: 1.5rem; position: relative; overflow: hidden; }
 
     .nav-links {
       display: flex;
@@ -240,13 +234,13 @@
 
     /* ── Hero ── */
     .hero {
-      padding: 3rem 0 4rem;
+      padding: 3.5rem 0 4.5rem;
     }
 
     .hero-split {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3rem 4rem;
+      gap: 3.5rem 5rem;
       align-items: center;
       margin-top: 0;
     }
@@ -258,13 +252,13 @@
     .hero-right {
       position: relative;
       text-align: left;
-      padding: 2rem 2.25rem 2.25rem;
+      padding: 3rem 3.25rem 3.15rem;
       border-left: none;
       background:
         radial-gradient(ellipse 90% 70% at 20% 15%, rgba(201, 169, 98, 0.12), transparent 55%),
         radial-gradient(ellipse 80% 60% at 80% 90%, rgba(61, 139, 158, 0.2), transparent 60%),
         rgba(255, 255, 255, 0.04);
-      border-radius: 54% 46% 48% 52% / 46% 52% 48% 54%;
+      border-radius: 50% 48% 52% 48% / 48% 52% 48% 52%;
       border: 1px solid rgba(126, 200, 212, 0.2);
       box-shadow:
         0 16px 48px rgba(0, 0, 0, 0.28),
@@ -570,9 +564,9 @@
       position: relative;
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      gap: 3rem 1.5rem;
-      padding: 2.5rem 0 3rem;
-      margin-top: 0.5rem;
+      gap: 5rem 2.75rem;
+      padding: 3.5rem 0 5rem;
+      margin-top: 1.5rem;
     }
 
     .water-scape::before {
@@ -619,12 +613,18 @@
     .scape-piece {
       position: relative;
       z-index: 1;
-      padding: 2rem 2.1rem;
+      padding: 3rem 3.25rem;
       border: 1px solid rgba(126, 200, 212, 0.16);
       animation: island-float 8s ease-in-out infinite;
       transition: box-shadow 0.45s ease, border-color 0.45s ease, filter 0.45s ease;
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
+    }
+
+    .scape-piece.island,
+    .scape-piece.reef,
+    .scape-piece.sediment {
+      overflow: hidden;
     }
 
     .scape-piece:hover {
@@ -690,22 +690,25 @@
     }
 
     .scape-piece.island.scape-about {
-      border-radius: 58% 42% 52% 48% / 48% 55% 45% 52%;
+      border-radius: 50% 50% 48% 52% / 48% 52% 48% 52%;
+      padding: 3.5rem 4.75rem 3.25rem 3.5rem;
     }
 
     .scape-piece.island.scape-floater {
-      border-radius: 46% 54% 50% 50% / 52% 48% 55% 45%;
+      border-radius: 48% 52% 50% 50% / 50% 48% 52% 50%;
+      padding: 3.25rem 3.5rem;
     }
 
     .scape-piece.panel {
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%);
-      border-radius: 14px;
+      border-radius: 16px;
       box-shadow:
         0 12px 40px rgba(0, 0, 0, 0.24),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
       animation: none;
       --tilt: 0deg;
+      padding: 3.25rem 3.5rem;
     }
 
     .scape-piece.panel.scape-rights {
@@ -713,7 +716,7 @@
     }
 
     .scape-piece.island.scape-workshop {
-      border-radius: 48% 52% 44% 56% / 50% 46% 54% 50%;
+      border-radius: 48% 52% 50% 50% / 50% 48% 52% 50%;
       border-color: rgba(201, 169, 98, 0.35);
       background:
         radial-gradient(ellipse 100% 80% at 50% 0%, rgba(201, 169, 98, 0.14), transparent 55%),
@@ -723,16 +726,17 @@
         0 16px 48px rgba(0, 0, 0, 0.3),
         0 0 40px rgba(201, 169, 98, 0.06),
         inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      padding: 3.25rem 3.5rem;
     }
 
     .scape-piece.boat {
       background:
         linear-gradient(175deg, rgba(94, 196, 212, 0.14) 0%, rgba(26, 74, 110, 0.42) 100%);
-      border-radius: 10px 10px 44% 44% / 10px 10px 32% 32%;
+      border-radius: 12px 12px 46% 46% / 12px 12px 34% 34%;
       box-shadow:
         0 18px 36px rgba(0, 0, 0, 0.3),
         inset 0 -12px 20px rgba(10, 22, 40, 0.25);
-      padding-top: 2.35rem;
+      padding: 3.5rem 3.25rem 3rem;
     }
 
     .scape-piece.boat::after {
@@ -765,14 +769,15 @@
       box-shadow:
         inset 0 -12px 28px rgba(0, 0, 0, 0.28),
         0 10px 32px rgba(0, 0, 0, 0.2);
+      padding-bottom: 3.75rem;
     }
 
     .scape-piece.reef.scape-conditions {
-      border-radius: 42% 58% 54% 46% / 32% 38% 62% 68%;
+      border-radius: 48% 52% 50% 50% / 36% 40% 60% 64%;
     }
 
     .scape-piece.reef.scape-duties {
-      border-radius: 50% 50% 38% 62% / 35% 65% 35% 65%;
+      border-radius: 50% 50% 42% 58% / 38% 58% 42% 62%;
     }
 
     .scape-piece.reef .reef-dots {
@@ -795,23 +800,24 @@
     }
 
     .scape-piece.sediment.scape-fee {
-      border-radius: 50% 50% 42% 58% / 40% 40% 60% 60%;
+      border-radius: 50% 50% 44% 56% / 42% 42% 58% 58%;
     }
 
     .scape-piece.sediment.scape-note {
-      border-radius: 44% 56% 52% 48% / 45% 55% 45% 55%;
+      border-radius: 48% 52% 50% 50% / 46% 54% 46% 54%;
     }
 
     .scape-piece.dock {
       background:
         linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
-      border-radius: 16px;
+      border-radius: 18px;
       border-color: rgba(201, 169, 98, 0.32);
       box-shadow:
         0 0 0 1px rgba(201, 169, 98, 0.1),
         0 24px 60px rgba(0, 0, 0, 0.28),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
       animation: none;
+      padding: 3.5rem 3.75rem;
     }
 
     .scape-piece.dock::before {
@@ -829,15 +835,15 @@
       border-radius: 2px;
     }
 
-    .scape-workshop { grid-column: 8 / 13; --tilt: 0.9deg; align-self: start; }
-    .scape-conditions { grid-column: 2 / 11; --tilt: 0.35deg; }
-    .scape-stirrer { grid-column: 1 / 7; --tilt: -1.1deg; }
-    .scape-floater { grid-column: 7 / 13; --tilt: 0.85deg; margin-top: -1rem; }
-    .scape-fee { grid-column: 4 / 10; text-align: center; padding: 1.15rem 1.5rem; --tilt: 0deg; animation: none; }
-    .scape-rights { grid-column: 1 / 13; --tilt: 0deg; }
-    .scape-duties { grid-column: 2 / 12; --tilt: 0.55deg; }
-    .scape-note { grid-column: 3 / 11; text-align: center; padding: 1.35rem; --tilt: 0deg; animation-duration: 11s; }
-    .scape-apply { grid-column: 1 / 13; animation: none; margin-top: 0.5rem; }
+    .scape-workshop { grid-column: 7 / 13; --tilt: 0.9deg; align-self: start; }
+    .scape-conditions { grid-column: 1 / 13; --tilt: 0.35deg; }
+    .scape-stirrer { grid-column: 1 / 8; --tilt: -1.1deg; }
+    .scape-floater { grid-column: 8 / 13; --tilt: 0.85deg; margin-top: 0.75rem; }
+    .scape-fee { grid-column: 3 / 11; text-align: center; padding: 2rem 2.75rem; --tilt: 0deg; animation: none; }
+    .scape-rights { grid-column: 1 / 13; --tilt: 0deg; margin-top: 0.5rem; }
+    .scape-duties { grid-column: 1 / 13; --tilt: 0.55deg; }
+    .scape-note { grid-column: 2 / 12; text-align: center; padding: 2rem 2.75rem; --tilt: 0deg; animation-duration: 11s; }
+    .scape-apply { grid-column: 1 / 13; animation: none; margin-top: 1.5rem; }
 
     .scape-type-head {
       margin-top: 0;
@@ -1296,14 +1302,20 @@
     }
 
     @media (max-width: 900px) {
-      .water-scape { grid-template-columns: 1fr; gap: 1.75rem; }
+      .water-scape { grid-template-columns: 1fr; gap: 3rem; padding: 2.5rem 0 3.5rem; }
       .scape-about, .scape-workshop, .scape-conditions,
       .scape-stirrer, .scape-floater, .scape-fee,
       .scape-rights, .scape-duties, .scape-note, .scape-apply {
         grid-column: 1 / -1;
         margin-top: 0;
       }
-      .scape-piece { animation: none; }
+      .scape-piece {
+        animation: none;
+        padding: 2.5rem 2.25rem;
+      }
+      .scape-piece.island.scape-about {
+        padding: 3rem 2.5rem 2.75rem;
+      }
 
       .hero-split {
         grid-template-columns: 1fr;
@@ -1361,7 +1373,7 @@
   <nav>
     <div class="inner">
       <a href="#" class="nav-brand">
-        <img src="assets/shanzhai-mfa-logo.png" alt="山寨 MFA" class="mfa-logo mfa-logo-nav" width="38" height="38" />
+        <img src="assets/shanzhai-mfa-logo.png?v=2" alt="山寨 MFA" class="mfa-logo mfa-logo-nav" width="38" height="38" />
         <span class="nav-logo">水会</span>
       </a>
       <ul class="nav-links">
@@ -1424,7 +1436,7 @@
 
       <!-- About island -->
       <article class="scape-piece island scape-about reveal" id="about">
-        <img src="assets/shanzhai-mfa-logo.png" alt="" class="mfa-logo mfa-logo-stamp" width="82" height="82" aria-hidden="true" />
+        <img src="assets/shanzhai-mfa-logo.png?v=2" alt="" class="mfa-logo mfa-logo-stamp" width="82" height="82" aria-hidden="true" />
         <span class="scape-deco corner" aria-hidden="true"></span>
         <p class="section-label">About</p>
         <h2>关于水会</h2>
@@ -1582,7 +1594,7 @@
     <p class="org-name">山寨水会 · SAW</p>
     <p>Shanzhai Association of Water</p>
     <div class="footer-sponsor">
-      <img src="assets/shanzhai-mfa-logo.png" alt="山寨 MFA" class="mfa-logo mfa-logo-footer" width="68" height="68" />
+      <img src="assets/shanzhai-mfa-logo.png?v=2" alt="山寨 MFA" class="mfa-logo mfa-logo-footer" width="68" height="68" />
       <p>非正式业务主管单位<br /><span>山寨 MFA · Shanzhai MFA</span></p>
     </div>
   </footer>
