@@ -148,14 +148,79 @@
       gap: 1rem;
     }
 
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+    }
+
+    .nav-brand:hover .mfa-logo {
+      opacity: 1;
+      filter:
+        invert(1)
+        sepia(0.5)
+        saturate(2.4)
+        hue-rotate(152deg)
+        brightness(1.15)
+        drop-shadow(0 0 14px rgba(94, 196, 212, 0.45));
+    }
+
     .nav-logo {
       font-family: var(--font-display);
       font-size: 1.5rem;
       color: var(--foam);
-      text-decoration: none;
       letter-spacing: 0.15em;
       text-shadow: 0 0 20px var(--accent-glow);
     }
+
+    /* ── Shanzhai MFA logo ── */
+    .mfa-logo {
+      display: block;
+      object-fit: contain;
+      border-radius: 50%;
+      flex-shrink: 0;
+      filter:
+        invert(1)
+        sepia(0.42)
+        saturate(2)
+        hue-rotate(152deg)
+        brightness(1.06)
+        drop-shadow(0 0 8px rgba(94, 196, 212, 0.22));
+      opacity: 0.9;
+      transition: filter 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .mfa-logo-nav {
+      width: 38px;
+      height: 38px;
+    }
+
+    .mfa-logo-footer {
+      width: 68px;
+      height: 68px;
+      margin: 0 auto 0.65rem;
+    }
+
+    .mfa-logo-stamp {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.85rem;
+      width: 82px;
+      height: 82px;
+      opacity: 0.32;
+      transform: rotate(7deg);
+      pointer-events: none;
+      filter:
+        invert(1)
+        sepia(0.35)
+        saturate(1.6)
+        hue-rotate(148deg)
+        brightness(1)
+        drop-shadow(0 0 6px rgba(94, 196, 212, 0.12));
+    }
+
+    .scape-about { grid-column: 1 / 8; --tilt: -0.7deg; margin-top: 1rem; position: relative; overflow: visible; }
 
     .nav-links {
       display: flex;
@@ -632,8 +697,19 @@
       border-radius: 46% 54% 50% 50% / 52% 48% 55% 45%;
     }
 
-    .scape-piece.island.scape-rights {
-      border-radius: 24px 24px 52% 48% / 24px 24px 38% 38%;
+    .scape-piece.panel {
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%);
+      border-radius: 14px;
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.24),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: none;
+      --tilt: 0deg;
+    }
+
+    .scape-piece.panel.scape-rights {
+      border-color: rgba(126, 200, 212, 0.22);
     }
 
     .scape-piece.island.scape-workshop {
@@ -753,13 +829,12 @@
       border-radius: 2px;
     }
 
-    .scape-about { grid-column: 1 / 8; --tilt: -0.7deg; margin-top: 1rem; }
     .scape-workshop { grid-column: 8 / 13; --tilt: 0.9deg; align-self: start; }
     .scape-conditions { grid-column: 2 / 11; --tilt: 0.35deg; }
     .scape-stirrer { grid-column: 1 / 7; --tilt: -1.1deg; }
     .scape-floater { grid-column: 7 / 13; --tilt: 0.85deg; margin-top: -1rem; }
     .scape-fee { grid-column: 4 / 10; text-align: center; padding: 1.15rem 1.5rem; --tilt: 0deg; animation: none; }
-    .scape-rights { grid-column: 1 / 13; --tilt: -0.25deg; }
+    .scape-rights { grid-column: 1 / 13; --tilt: 0deg; }
     .scape-duties { grid-column: 2 / 12; --tilt: 0.55deg; }
     .scape-note { grid-column: 3 / 11; text-align: center; padding: 1.35rem; --tilt: 0deg; animation-duration: 11s; }
     .scape-apply { grid-column: 1 / 13; animation: none; margin-top: 0.5rem; }
@@ -1166,6 +1241,26 @@
       margin-bottom: 0.5rem;
     }
 
+    .footer-sponsor {
+      margin-top: 1.75rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(126, 200, 212, 0.1);
+    }
+
+    .footer-sponsor p {
+      margin: 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      opacity: 0.75;
+      line-height: 1.7;
+    }
+
+    .footer-sponsor span {
+      color: var(--aqua);
+      letter-spacing: 0.08em;
+    }
+
     footer a {
       color: var(--aqua);
       text-decoration: none;
@@ -1265,7 +1360,10 @@
 
   <nav>
     <div class="inner">
-      <a href="#" class="nav-logo">水会</a>
+      <a href="#" class="nav-brand">
+        <img src="assets/shanzhai-mfa-logo.png" alt="山寨 MFA" class="mfa-logo mfa-logo-nav" width="38" height="38" />
+        <span class="nav-logo">水会</span>
+      </a>
       <ul class="nav-links">
         <li><a href="#workshop">工作坊</a></li>
         <li><a href="#about">关于</a></li>
@@ -1326,6 +1424,7 @@
 
       <!-- About island -->
       <article class="scape-piece island scape-about reveal" id="about">
+        <img src="assets/shanzhai-mfa-logo.png" alt="" class="mfa-logo mfa-logo-stamp" width="82" height="82" aria-hidden="true" />
         <span class="scape-deco corner" aria-hidden="true"></span>
         <p class="section-label">About</p>
         <h2>关于水会</h2>
@@ -1372,8 +1471,8 @@
         <p class="publish-note" style="margin-top:0.5rem;">详询水文信号 · 入会后另行通知</p>
       </article>
 
-      <!-- Rights island -->
-      <article class="scape-piece island scape-rights reveal" id="rights">
+      <!-- Rights panel -->
+      <article class="scape-piece panel scape-rights reveal" id="rights">
         <p class="section-label">Rights &amp; Duties</p>
         <h2>（三）会员的权利与义务</h2>
 
@@ -1482,7 +1581,10 @@
   <footer>
     <p class="org-name">山寨水会 · SAW</p>
     <p>Shanzhai Association of Water</p>
-    <p style="margin-top:0.75rem; opacity:0.6;">非正式业务主管单位：山寨 MFA</p>
+    <div class="footer-sponsor">
+      <img src="assets/shanzhai-mfa-logo.png" alt="山寨 MFA" class="mfa-logo mfa-logo-footer" width="68" height="68" />
+      <p>非正式业务主管单位<br /><span>山寨 MFA · Shanzhai MFA</span></p>
+    </div>
   </footer>
 
   <script src="config.js?v=4"></script>

@@ -64,13 +64,49 @@
       justify-content: space-between;
     }
 
+    .nav-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+    }
+
     .nav-logo {
       font-family: var(--font-display);
       font-size: 1.5rem;
       color: var(--foam);
-      text-decoration: none;
       letter-spacing: 0.15em;
     }
+
+    .mfa-logo {
+      display: block;
+      border-radius: 50%;
+      filter:
+        invert(1)
+        sepia(0.42)
+        saturate(2)
+        hue-rotate(152deg)
+        brightness(1.06)
+        drop-shadow(0 0 8px rgba(94, 196, 212, 0.22));
+      opacity: 0.9;
+    }
+
+    .mfa-logo-nav { width: 34px; height: 34px; }
+
+    .footer-sponsor {
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(126, 200, 212, 0.1);
+    }
+
+    .footer-sponsor p {
+      margin: 0.5rem 0 0;
+      font-size: 0.75rem;
+      opacity: 0.7;
+      letter-spacing: 0.1em;
+    }
+
+    .mfa-logo-footer { width: 56px; height: 56px; margin: 0 auto; }
 
     .nav-back {
       color: var(--text-muted);
@@ -268,7 +304,10 @@
 
   <nav>
     <div class="inner">
-      <a href="index.html" class="nav-logo">水会</a>
+      <a href="index.html" class="nav-brand">
+        <img src="assets/shanzhai-mfa-logo.png" alt="山寨 MFA" class="mfa-logo mfa-logo-nav" width="34" height="34" />
+        <span class="nav-logo">水会</span>
+      </a>
       <a href="index.html#apply" class="nav-back">← 申请入会</a>
     </div>
   </nav>
@@ -308,6 +347,10 @@
   <footer>
     <p>山寨水会 · 会员池</p>
     <p style="margin-top:0.5rem;"><a href="index.html">返回主页</a></p>
+    <div class="footer-sponsor">
+      <img src="assets/shanzhai-mfa-logo.png" alt="山寨 MFA" class="mfa-logo mfa-logo-footer" width="56" height="56" />
+      <p>非正式业务主管单位 · 山寨 MFA</p>
+    </div>
   </footer>
 
   <script src="config.js?v=4"></script>
