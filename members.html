@@ -186,12 +186,14 @@
       letter-spacing: 0.05em;
     }
 
+    .member-type.stirrer,
     .member-type.regular {
       background: rgba(94, 196, 212, 0.12);
       color: var(--accent);
       border: 1px solid rgba(94, 196, 212, 0.25);
     }
 
+    .member-type.floater,
     .member-type.student {
       background: rgba(201, 169, 98, 0.1);
       color: var(--gold);
@@ -287,12 +289,12 @@
         <div class="stat-label">已登记总数</div>
       </div>
       <div class="stat">
-        <div class="stat-num" id="regularCount">0</div>
-        <div class="stat-label">普通会员</div>
+        <div class="stat-num" id="stirrerCount">0</div>
+        <div class="stat-label">搅水员</div>
       </div>
       <div class="stat">
-        <div class="stat-num" id="studentCount">0</div>
-        <div class="stat-label">学生会员</div>
+        <div class="stat-num" id="floaterCount">0</div>
+        <div class="stat-label">划水员</div>
       </div>
     </div>
 
@@ -309,7 +311,7 @@
   </footer>
 
   <script src="config.js?v=4"></script>
-  <script src="db.js?v=4"></script>
+  <script src="db.js?v=5"></script>
   <script>
     const content = document.getElementById('content');
     const statsBar = document.getElementById('statsBar');
@@ -358,12 +360,12 @@
         return;
       }
 
-      const regular = list.filter((m) => m.member_type === 'regular').length;
-      const student = list.filter((m) => m.member_type === 'student').length;
+      const stirrer = list.filter((m) => m.member_type === 'stirrer' || m.member_type === 'regular').length;
+      const floater = list.filter((m) => m.member_type === 'floater' || m.member_type === 'student').length;
 
       document.getElementById('totalCount').textContent = list.length;
-      document.getElementById('regularCount').textContent = regular;
-      document.getElementById('studentCount').textContent = student;
+      document.getElementById('stirrerCount').textContent = stirrer;
+      document.getElementById('floaterCount').textContent = floater;
       statsBar.hidden = false;
 
       content.innerHTML = `<div class="members-grid">${list.map((m, i) => `

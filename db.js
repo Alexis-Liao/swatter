@@ -1,7 +1,9 @@
 (function () {
   const TYPE_LABELS = {
-    regular: '普通会员 — 流动的水生生物',
-    student: '学生会员 — 未脱水的陆地生物',
+    stirrer: '搅水员 — 制造漩涡',
+    floater: '划水员 — 练习漂浮与划水',
+    regular: '搅水员 — 制造漩涡',
+    student: '划水员 — 练习漂浮与划水',
   };
 
   function getScriptUrl() {
